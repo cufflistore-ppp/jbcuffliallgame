@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Checkout - CUFFLI ALL GAME</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+<img src="logo.png" alt="Logo">
+<span>CUFFLI ALL GAME</span>
+</div>
+
+<div class="menu">
+<a href="index.html">Beranda</a>
+<a href="detail.html">Detail</a>
+</div>
+
+</header>
+
+<section class="checkout">
+
+<h1>Checkout</h1>
+
+<div class="card">
+
+<h2>Akun Sultan Free Fire</h2>
+
+<p>ID Pesanan</p>
+
+<h3 id="orderId">#FF20260001</h3>
+
+<hr>
+
+<p>Total Pembayaran</p>
+
+<h1 id="harga">Rp 250.000</h1>
+
+<button onclick="copyNominal()">
+<i class="fa-solid fa-copy"></i>
+Salin Nominal
+</button>
+
+<hr>
+
+<h2>Scan QRIS</h2>
+
+<div class="qris-box">
+    <img id="qrisImage" src="qris.jpg">
+</div>
+
+<p>
+Silakan scan QRIS di atas menggunakan ewallet kamu (dana)</p>
+
+<hr>
+
+<h2>Sisa Waktu Pembayaran</h2>
+
+  <div id="timer">5:00</div>
+  
+<script>
+let waktu = 5 * 60; // 5 menit = 300 detik
+
+const countdown = setInterval(() => {
+    let menit = Math.floor(waktu / 60);
+    let detik = waktu % 60;
+
+    document.getElementById("timer").textContent =
+        `${menit}:${detik.toString().padStart(2, "0")}`;
+
+    waktu--;
+
+    if (waktu < 0) {
+        clearInterval(countdown);
+        document.getElementById("timer").textContent = "00:00";
+        alert("Waktu pembayaran telah habis!");
+    }
+}, 1000);
+</script>
+
+<hr>
+
+<booton onclick="bayar()" class="detail">
+
+Saya Sudah Bayar
+
+</booton>
+
+<a href="https://wa.me//6287722626689"
+
+class="detail"
+
+id="waButton">
+
+<i class="fab fa-whatsapp"></i>
+
+Hubungi Admin
+
+</a>
+
+</div>
+
+</section>
+
+</foother>
+
+<div class="bottom-nav">
+    <a href="index.html">
+        <i class="fas fa-home"></i>
+        <span>Beranda</span>
+    </a>
+
+    <a href="rental.html">
+        <i class="fas fa-gamepad"></i>
+        <span>Rental</span>
+    </a>
+
+    <a href="riwayat.html">
+        <i class="fas fa-history"></i>
+        <span>Riwayat</span>
+    </a>
+
+    <a href="contact.html">
+        <i class="fab fa-whatsapp"></i>
+        <span>Kontak</span>
+    </a>
+
+    <a href="akun.html">
+        <i class="fas fa-user"></i>
+        <span>Akun</span>
+    </a>
+</div>
+  
+<script>
+
+function copyNominal(){
+
+navigator.clipboard.writeText("250000");
+
+alert("Nominal berhasil disalin.");
+
+}
+
+let waktu = 900;
+
+const timer = document.getElementById("timer");
+
+setInterval(()=>{
+
+let menit = Math.floor(waktu/60);
+
+let detik = waktu%60;
+
+timer.innerHTML=
+
+String(menit).padStart(2,"0")
+
++":"
+
++
+
+String(detik).padStart(2,"0");
+
+if(waktu>0){
+
+waktu--;
+
+}
+
+},1000);
+
+function bayar(){
+
+let pesan=
+
+`Halo Admin
+
+Saya sudah melakukan pembayaran.
+
+ID Pesanan : FF20260001
+
+Nominal : Rp250.000
+
+Mohon segera cek pembayaran saya.
+
+Terima kasih.`;
+
+window.open(
+
+"https://wa.me//6287722626689+
+
+encodeURIComponent(pesan)
+
+);
+
+}
+
+</script>
+
+</body>
+
+</html>
