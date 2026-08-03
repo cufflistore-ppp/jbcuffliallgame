@@ -22,8 +22,7 @@ const produkData = {
       "banner 2 1cuffli.jpg",
       "banner 3 1cuffli.jpg",
       "banner 4 1cuffli.jpg",
-      "banner 5 1cuffli.jpg",
-      "banner 6 1cuffli.jpg"
+      "banner 5 1cuffli.jpg"
     ],
      thumbnail: "banner 1 1cuffli.jpg" 
     },
