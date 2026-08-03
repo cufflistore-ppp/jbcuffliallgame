@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Detail Akun — CUFFLI ALL GAME</title>
+  <title>Pembayaran — CUFFLI ALL GAME</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body data-page="detail">
+<body data-page="pembayaran">
 
   <!-- HEADER -->
   <header class="header">
@@ -18,28 +18,29 @@
     </div>
   </header>
 
-  <!-- GALLERY 5 FOTO -->
-  <div class="detail-gallery">
-    <div class="detail-gallery-track" id="galleryTrack">
-      <!-- diisi JS -->
+  <div class="pay-wrap" id="payContent">
+    <h1 class="pay-title">Scan QRIS</h1>
+    <p class="pay-produk-nama" id="payNama">—</p>
+    <div class="pay-harga" id="payHarga">—</div>
+
+    <div class="qris-box">
+      <!-- Ganti src dengan foto QRIS kamu sendiri -->
+      <img src="qris.jpg" alt="QRIS">
     </div>
+
+    <p class="qris-time">Sisa waktu: <span id="qrisTimer">5:00</span></p>
+
+    <a class="btn-wa" id="btnWA" href="wa.me/6287722626689" target="_blank" rel="noopener">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="wa.me/6287722626689"/></svg>
+      Konfirmasi ke Admin
+    </a>
+
+    <p class="pay-note">
+      Setelah transfer, tekan tombol di atas untuk konfirmasi ke admin via WhatsApp.<br>
+      Akun akan dikirim setelah pembayaran terverifikasi.
+    </p>
   </div>
-  <div class="gallery-dots" id="galleryDots"></div>
 
-  <!-- DETAIL BODY -->
-  <div class="detail-body">
-    <h1 class="detail-nama" id="detailNama">—</h1>
-    <p class="detail-subtitle" id="detailSubtitle">—</p>
-    <div class="detail-harga" id="detailHarga">—</div>
-    <p class="detail-deskripsi" id="detailDeskripsi">—</p>
-
-    <h2 class="section-title">Spesifikasi Akun</h2>
-    <ul class="spek-list" id="detailSpek">
-      <!-- diisi JS -->
-    </ul>
-
-    <button class="btn-beli" id="btnBeli">Beli Sekarang</button>
-  </div>
 
  <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
