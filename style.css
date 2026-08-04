@@ -209,7 +209,7 @@ img {
 
 .produk-card img {
   width: 100%;
-  height: 110px;
+  height: 250px;
   object-fit: cover;
 }
 
@@ -238,7 +238,7 @@ img {
 .detail-gallery {
   position: relative;
   width: 100%;
-  height: 240px;
+  height: 455px;
   overflow: hidden;
   border-radius: 0 0 var(--radius) var(--radius);
 }

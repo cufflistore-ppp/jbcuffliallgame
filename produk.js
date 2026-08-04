@@ -1,7 +1,7 @@
 // Data produk akun game - setiap produk punya detail & harga berbeda
 const produkData = {
-  "ff/cuffliallgame/bersg/1": {
-    id: "ff/cuffliallgame/bersg/1",
+  "free fire/cuffliallgame/bersg/1": {
+    id: "free fire/cuffliallgame/bersg/1",
     nama: "Free Fire",
     subtitle: "Stok Akun Ber Sg Cuffli All Game",
     harga: 55000,
@@ -22,12 +22,14 @@ const produkData = {
       "banner 2 1cuffli.jpg",
       "banner 3 1cuffli.jpg",
       "banner 4 1cuffli.jpg",
-      "banner 5 1cuffli.jpg"
+      "banner 5 1cuffli.jpg",
+      "banner 6 1cuffli.jpg",
+      "banner 7 1cuffli.jpg"
     ],
      thumbnail: "banner 1 1cuffli.jpg" 
     },
-  "ff/cuffliallgame/res/2": {
-    id: "ff/cuffliallgame/res/2",
+  "free fire/cuffliallgame/res/2": {
+    id: "free fire/cuffliallgame/res/2",
     nama: "Free Fire",
     subtitle: "Stok Akun Res Cuffli All Game",
     harga: 19000,
@@ -49,7 +51,8 @@ const produkData = {
       "banner 3 2cuffli.jpg",
       "banner 4 2cuffli.jpg",
       "banner 5 2cuffli.jpg",
-      "banner 6 2cuffli.jpg"
+      "banner 6 2cuffli.jpg",
+      "banner 7 2cuffli.jpg"
     ],
     thumbnail: "banner 1 2cuffli.jpg"
   },
