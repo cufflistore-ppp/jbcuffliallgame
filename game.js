@@ -666,16 +666,16 @@ function flipMemory(i) {
 
 // ===== TEBAK PLANET =====
 const PLANET_QUIZ = [
-  { img: 'planets/mars.jpg', name: 'MARS', hint: 'Planet merah, tetangga Bumi', options: ['MARS', 'VENUS', 'MERKURIUS', 'JUPITER'] },
-  { img: 'planets/jupiter.jpg', name: 'JUPITER', hint: 'Planet terbesar di tata surya', options: ['JUPITER', 'SATURNUS', 'NEPTUNUS', 'MARS'] },
-  { img: 'planets/saturnus.jpg', name: 'SATURNUS', hint: 'Punya cincin indah', options: ['SATURNUS', 'URANUS', 'JUPITER', 'NEPTUNUS'] },
-  { img: 'planets/neptunus.jpg', name: 'NEPTUNUS', hint: 'Planet biru paling jauh (resmi)', options: ['NEPTUNUS', 'URANUS', 'BUMI', 'MARS'] },
-  { img: 'planets/bumi.jpg', name: 'BUMI', hint: 'Planet kita, ada kehidupan', options: ['BUMI', 'MARS', 'VENUS', 'MERKURIUS'] },
-  { img: 'planets/venus.jpg', name: 'VENUS', hint: 'Planet terpanas, sering disebut bintang fajar', options: ['VENUS', 'MARS', 'MERKURIUS', 'BUMI'] },
-  { img: 'planets/merkurius.jpg', name: 'MERKURIUS', hint: 'Planet terdekat dengan Matahari', options: ['MERKURIUS', 'VENUS', 'MARS', 'PLUTO'] },
-  { img: 'planets/uranus.jpg', name: 'URANUS', hint: 'Planet es yang miring sumbunya', options: ['URANUS', 'NEPTUNUS', 'SATURNUS', 'JUPITER'] },
-  { img: 'planets/pluto.jpg', name: 'PLUTO', hint: 'Dulu planet ke-9, sekarang planet kerdil', options: ['PLUTO', 'NEPTUNUS', 'MARS', 'BULAN'] },
-  { img: 'planets/matahari.jpg', name: 'MATAHARI', hint: 'Bintang pusat tata surya (bukan planet)', options: ['MATAHARI', 'BULAN', 'MARS', 'JUPITER'] }
+  { img: 'mars.jpg', name: 'MARS', hint: 'Planet merah, tetangga Bumi', options: ['MARS', 'VENUS', 'MERKURIUS', 'JUPITER'] },
+  { img: 'jupiter.jpg', name: 'JUPITER', hint: 'Planet terbesar di tata surya', options: ['JUPITER', 'SATURNUS', 'NEPTUNUS', 'MARS'] },
+  { img: 'saturnus.jpg', name: 'SATURNUS', hint: 'Punya cincin indah', options: ['SATURNUS', 'URANUS', 'JUPITER', 'NEPTUNUS'] },
+  { img: 'neptunus.jpg', name: 'NEPTUNUS', hint: 'Planet biru paling jauh (resmi)', options: ['NEPTUNUS', 'URANUS', 'BUMI', 'MARS'] },
+  { img: 'bumi.jpg', name: 'BUMI', hint: 'Planet kita, ada kehidupan', options: ['BUMI', 'MARS', 'VENUS', 'MERKURIUS'] },
+  { img: 'venus.jpg', name: 'VENUS', hint: 'Planet terpanas, sering disebut bintang fajar', options: ['VENUS', 'MARS', 'MERKURIUS', 'BUMI'] },
+  { img: 'merkurius.jpg', name: 'MERKURIUS', hint: 'Planet terdekat dengan Matahari', options: ['MERKURIUS', 'VENUS', 'MARS', 'PLUTO'] },
+  { img: 'uranus.jpg', name: 'URANUS', hint: 'Planet es yang miring sumbunya', options: ['URANUS', 'NEPTUNUS', 'SATURNUS', 'JUPITER'] },
+  { img: 'pluto.jpg', name: 'PLUTO', hint: 'Dulu planet ke-9, sekarang planet kerdil', options: ['PLUTO', 'NEPTUNUS', 'MARS', 'BULAN'] },
+  { img: 'matahari.jpg', name: 'MATAHARI', hint: 'Bintang pusat tata surya (bukan planet)', options: ['MATAHARI', 'BULAN', 'MARS', 'JUPITER'] }
 ];
 
 function startTebakPlanet() {
