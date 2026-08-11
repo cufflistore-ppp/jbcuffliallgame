@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pembayaran — CUFFLI ALL GAME</title>
+  <title>Beli Spin — CUFFLI ALL GAME</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
-<body data-page="pembayaran">
+<body data-page="pembayaran-spin">
 
-  <!-- HEADER -->
   <header class="header">
     <div class="logo-wrap">
       <a href="index.html" style="display:flex;align-items:center;gap:10px">
@@ -35,53 +34,33 @@
   </header>
 
   <div class="pay-wrap" id="payContent">
-    <h1 class="pay-title">Scan QRIS</h1>
-    <p class="pay-produk-nama" id="payNama">—</p>
-    <div class="pay-harga" id="payHarga">—</div>
+    <h1 class="pay-title">Beli Paket Spin</h1>
+    <p class="pay-produk-nama">3x Spin Voucher</p>
+    <div class="pay-harga">Rp 15.000</div>
 
-    <!-- PILIH VOUCHER DARI SPIN -->
-    <div id="voucherSelectBox" class="voucher-select-box" style="display:none; margin:14px 0;">
-      <label style="display:block; font-size:13px; color:#aaa; margin-bottom:6px;">
-        <i class="fa-solid fa-ticket"></i> Pakai Voucher Spin
-      </label>
-      <select id="voucherSelect" class="voucher-select" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid #333; background:#1a1a24; color:#fff; font-size:14px;">
-        <option value="">— Tidak pakai voucher —</option>
-      </select>
-    </div>
-
-    <!-- QR KHUSUS PRODUK -->
     <div class="qris-box">
-      <img id="payQR" src="qris.jpg" alt="QRIS">
+      <img src="qris.jpg" alt="QRIS">
     </div>
-    <p class="qris-label" id="payQRLabel">QRIS Pembayaran</p>
+    <p class="qris-label">QRIS Pembayaran Spin</p>
     <p class="qris-time">Sisa waktu: <span id="qrisTimer">5:00</span></p>
-
-    <!-- ADMIN INFO DI HALAMAN BAYAR -->
-    <div class="pay-admin-card" id="payAdminCard">
-      <img class="pay-admin-foto" id="payAdminFoto" src="" alt="Admin">
-      <div>
-        <div class="pay-admin-nama" id="payAdminNama">Admin</div>
-        <div class="pay-admin-sub">Transfer selesai? Konfirmasi ke admin ini</div>
-      </div>
-    </div>
 
     <a class="btn-wa" id="btnWA" href="#" target="_blank" rel="noopener">
       <i class="fa-brands fa-whatsapp" style="font-size:22px"></i>
-      Konfirmasi ke Admin
+      Konfirmasi Pembayaran ke Admin
     </a>
 
-    <button class="btn-primary" id="btnConfirmPay" style="margin-top:12px; max-width:320px; width:100%;">
-      <i class="fa-solid fa-check"></i> Saya Sudah Bayar
-    </button>
+    <a href="spin.html" class="btn-primary" style="margin-top:14px; max-width:320px; text-align:center; text-decoration:none; display:block">
+      <i class="fa-solid fa-key"></i> Sudah dapat kode? Redeem di sini
+    </a>
 
     <p class="pay-note">
-      Setelah transfer, tekan tombol di atas untuk konfirmasi ke admin via WhatsApp.<br>
-      Akun akan dikirim setelah pembayaran terverifikasi. <strong>Fast Process</strong> aktif!
+      Setelah transfer, konfirmasi ke admin via WhatsApp.<br>
+      Admin akan memberikan <strong>kode redeem</strong> (1 kode = 1x pakai).<br>
+      Masukkan kode di halaman Spin untuk mendapatkan 3x spin.
     </p>
   </div>
 
-  <!-- BOTTOM NAV -->
-                  <nav class="bottom-nav bottom-nav-6">
+                <nav class="bottom-nav bottom-nav-6">
     <a href="index.html" class="nav-item active">
       <i class="fa-solid fa-house"></i>
       <span>Beranda</span>
@@ -111,6 +90,22 @@
   <script src="firebase.js"></script>
   <script src="produk.js"></script>
   <script src="script.js"></script>
-  <script src="spin.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = getCurrentUser();
+      if (!user) {
+        document.getElementById('payContent').innerHTML =
+          '<p class="loading">Login dulu untuk beli spin. <a href="login.html" style="color:#00b4ff">Login</a></p>';
+        return;
+      }
+
+      const pesan = encodeURIComponent(
+        `Halo Admin CUFFLI 👋\n\nSaya sudah transfer Rp 15.000 untuk paket 3x Spin Voucher.\n\nUsername: ${user.username || user.nama}\n\nMohon dicek & kirim kode redeem-nya ya. Terima kasih!`
+      );
+      document.getElementById('btnWA').href = `https://wa.me/6287722626689?text=${pesan}`;
+
+      if (typeof startQrisTimer === 'function') startQrisTimer(5);
+    });
+  </script>
 </body>
 </html>

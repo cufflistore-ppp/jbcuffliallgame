@@ -3,68 +3,626 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CUFFLI ALL GAME — Jual Akun Game</title>
+  <title>CUFFLI ALL GAME — Jual Beli Akun Game Termurah Di Seluruh Indonesia</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    /* ===== HERO — Neon Blue theme ===== */
+    .hero-store {
+      margin: 12px 14px 16px;
+      padding: 18px 16px 14px;
+      border-radius: 20px;
+      background: linear-gradient(145deg, #0a1525 0%, #0a1220 40%, #080e18 100%);
+      border: 1px solid rgba(0, 200, 255, 0.28);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.45), 0 0 30px rgba(0, 180, 255, 0.08), inset 0 1px 0 rgba(255,255,255,0.04);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-store::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -20%;
+      width: 70%;
+      height: 140%;
+      background: radial-gradient(circle, rgba(0, 200, 255, 0.14) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(0, 180, 255, 0.15);
+      border: 1px solid rgba(0, 220, 255, 0.4);
+      color: #7ef0ff;
+      font-size: 0.72rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      box-shadow: 0 0 12px rgba(0, 200, 255, 0.2);
+    }
+    .hero-badge i { font-size: 0.7rem; }
+    .hero-body {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-text { flex: 1; min-width: 0; padding-bottom: 4px; }
+    .hero-text h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      line-height: 1.25;
+      color: #fff;
+      margin: 0 0 6px;
+      letter-spacing: -0.2px;
+    }
+    .hero-text h1 span { color: #00e5ff; text-shadow: 0 0 18px rgba(0, 229, 255, 0.45); }
+    .hero-text p {
+      font-size: 0.78rem;
+      color: #8ab4c8;
+      margin: 0;
+      line-height: 1.4;
+    }
+    .hero-char {
+      width: 110px;
+      height: 140px;
+      object-fit: contain;
+      object-position: bottom center;
+      flex-shrink: 0;
+      filter: drop-shadow(0 8px 22px rgba(0, 200, 255, 0.4));
+      margin-right: -6px;
+      margin-bottom: -14px;
+    }
+
+    /* Search */
+    .search-wrap {
+      margin: 0 14px 12px;
+      position: relative;
+    }
+    .search-wrap input {
+      width: 100%;
+      padding: 13px 44px 13px 42px;
+      border-radius: 14px;
+      border: 1px solid rgba(0, 180, 255, 0.35);
+      background: linear-gradient(90deg, #0c1525, #0a1220);
+      color: #eee;
+      font-size: 0.9rem;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .search-wrap input::placeholder { color: #6a8a9e; }
+    .search-wrap input:focus {
+      border-color: rgba(0, 220, 255, 0.65);
+      box-shadow: 0 0 0 3px rgba(0, 180, 255, 0.15), 0 0 20px rgba(0, 200, 255, 0.12);
+    }
+    .search-wrap .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #00b4ff;
+      font-size: 0.95rem;
+    }
+    .search-wrap .search-clear {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.08);
+      border: none;
+      color: #ccc;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Chips */
+    .chips-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 0 14px 14px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .chips-scroll::-webkit-scrollbar { display: none; }
+    .chip {
+      flex-shrink: 0;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #a0c0d0;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .chip:hover, .chip.active {
+      background: linear-gradient(135deg, rgba(0, 180, 255, 0.35), rgba(0, 120, 220, 0.3));
+      border-color: rgba(0, 220, 255, 0.55);
+      color: #fff;
+      box-shadow: 0 0 14px rgba(0, 200, 255, 0.3);
+    }
+    .chip .chip-icon { margin-right: 4px; font-size: 0.7rem; }
+
+    /* HOT Top Up */
+    .hot-card {
+      margin: 0 14px 12px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #0c1a2e 0%, #0a1525 100%);
+      border: 1px solid rgba(0, 200, 255, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 0 20px rgba(0, 180, 255, 0.08);
+    }
+    .hot-card:active { transform: scale(0.98); }
+    .hot-left { display: flex; align-items: center; gap: 12px; }
+    .hot-badge {
+      background: linear-gradient(135deg, #00b4ff, #00e5ff);
+      color: #041018;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 4px 9px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 0 12px rgba(0, 220, 255, 0.4);
+    }
+    .hot-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 4px;
+    }
+    .hot-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(0, 180, 255, 0.15);
+      border: 1px solid rgba(0, 220, 255, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #00e5ff;
+      font-size: 1.15rem;
+      box-shadow: 0 0 14px rgba(0, 200, 255, 0.2);
+    }
+
+    /* Menu grid */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 0 14px 12px;
+    }
+    .menu-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #e0eef5;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .menu-btn:hover, .menu-btn:active {
+      background: rgba(0, 180, 255, 0.12);
+      border-color: rgba(0, 220, 255, 0.35);
+      box-shadow: 0 0 12px rgba(0, 180, 255, 0.15);
+    }
+    .menu-btn .menu-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      background: rgba(255,255,255,0.08);
+    }
+    .menu-btn.wa .menu-icon { background: rgba(37,211,102,0.2); color: #25d366; }
+    .menu-btn.phone .menu-icon { background: rgba(0,180,255,0.15); color: #00b4ff; }
+    .menu-btn.stok .menu-icon { background: rgba(255,170,0,0.15); color: #ffaa00; }
+    .menu-btn.rekber .menu-icon { background: rgba(0, 200, 255, 0.15); color: #00e5ff; }
+
+    .menu-jual {
+      margin: 0 14px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: linear-gradient(90deg, rgba(10,25,40,0.95), rgba(8,20,35,0.95));
+      border: 1px solid rgba(0, 220, 255, 0.28);
+      color: #e0f5ff;
+      font-size: 0.92rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .menu-jual .jual-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(0, 200, 255, 0.18);
+      color: #00e5ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.05rem;
+      box-shadow: 0 0 12px rgba(0, 200, 255, 0.25);
+    }
+
+    .info-terbaru {
+      margin: 0 14px 18px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #90b0c0;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-decoration: none;
+    }
+    .info-terbaru i { color: #00e5ff; }
+
+    .section-pad { padding: 0 14px; }
+    .filter-result-info {
+      font-size: 0.8rem;
+      color: #6a8a9e;
+      margin: 0 14px 8px;
+      display: none;
+    }
+  </style>
 </head>
 <body data-page="index">
 
   <!-- HEADER -->
   <header class="header">
     <div class="logo-wrap">
-      <img class="logo-img" src="logo.png" alt="Logo">
+      <img class="logo-img" src="logo.png" alt="Logo" onerror="this.style.display='none'">
       <span class="logo-text">CUFFLI ALL GAME</span>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="btnNotif" onclick="toggleNotifPanel()" title="Notifikasi">
+        <i class="fa-solid fa-bell"></i>
+        <span class="badge" id="notifBadge" style="display:none">0</span>
+      </button>
+      <button class="btn-login" id="btnLogin" onclick="location.href='login.html'">
+        <i class="fa-solid fa-user"></i> Login
+      </button>
+      <div class="user-area" id="userArea" style="display:none">
+        <span class="user-name" id="userName">User</span>
+        <button class="icon-btn" onclick="logoutUser()" title="Logout">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- BANNER BERGERAK -->
-  <section class="banner-section">
-    <div class="banner-track">
-      <div class="banner-slide">
-        <img src="banner 1.jpg" alt="Banner 1">
-        </div>
-      
-      <div class="banner-slide">
-        <img src="banner 2.jpg" alt="Banner 2">
-        </div>
-      
-      <div class="banner-slide">
-        <img src="banner 3.jpg" alt="Banner 3">
+  <!-- HERO seperti screenshot -->
+  <section class="hero-store">
+    <div class="hero-badge">
+      <i class="fa-solid fa-bolt"></i> Store Gaming Cuffli
+    </div>
+    <div class="hero-body">
+      <div class="hero-text">
+        <h1>Jual, Beli &amp; Stok Murah <span>Akun Game Premium,Pelajar</span></h1>
+        <p>Stok Paling Murah Di Seluruh Indonesia</p>
       </div>
+      <img class="hero-char" src="character-hero.jpg" alt="Mascot" onerror="this.style.display='none'">
     </div>
   </section>
 
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+    <input type="text" id="searchInput" placeholder="Temukan akun impianmu..." autocomplete="off">
+    <button type="button" class="search-clear" id="searchClear" title="Hapus">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <!-- CHIPS FILTER -->
+  <div class="chips-scroll" id="chipsRow">
+    <button class="chip active" data-tag="all">Semua</button>
+    <button class="chip" data-tag="free fire"><i class="fa-solid fa-fire chip-icon"></i>free fire</button>
+    <button class="chip" data-tag="mobile legends">mobile legends</button>
+    <button class="chip" data-tag="honor of kings">honor of kings</button>
+    <button class="chip" data-tag="pubg">pubg</button>
+    <button class="chip" data-tag="roblox">roblox</button>
+    <button class="chip" data-tag="fc mobile">fc mobile</button>
+  </div>
+
+  <!-- HOT Top Up -->
+  <a href="cufflistore.vercel.app" class="hot-card">
+    <div class="hot-left">
+      <div>
+        <span class="hot-badge"><i class="fa-solid fa-fire"></i> HOT</span>
+        <div class="hot-title">Top Up All Game</div>
+      </div>
+    </div>
+    <div class="hot-icon"><i class="fa-solid fa-bolt"></i></div>
+  </a>
+
+  <!-- Menu cepat -->
+  <div class="menu-grid">
+    <a class="menu-btn wa" href="https://whatsapp.com/channel/0029Vb7SrriKgsNx0n1dha2g" target="_blank" rel="noopener">
+      <span>Saluran WA</span>
+      <span class="menu-icon"><i class="fa-brands fa-whatsapp"></i></span>
+    </a>
+    <a class="menu-btn phone" href="kontak.html">
+      <span>Nomor resmi</span>
+      <span class="menu-icon"><i class="fa-solid fa-comment-dots"></i></span>
+    </a>
+    <a class="menu-btn stok" href="index.html">
+      <span>Stok Akun</span>
+      <span class="menu-icon"><i class="fa-solid fa-cart-shopping"></i></span>
+    </a>
+    <a class="menu-btn rekber" href="https://wa.me/6287722626689">
+      <span>RekBer</span>
+      <span class="menu-icon"><i class="fa-solid fa-gift"></i></span>
+    </a>
+  </div>
+
+  <a class="menu-jual" href="https://wa.me/6287722626689?text=Halo%20Admin%2C%20saya%20ingin%20jual%20akun%20game" target="_blank" rel="noopener">
+    <span>Jual akun</span>
+    <span class="jual-icon"><i class="fa-solid fa-gamepad"></i></span>
+  </a>
+
+  <a class="info-terbaru" href="tentang.html">
+    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+    <span>Info Terbaru</span>
+  </a>
+
   <!-- PRODUK -->
-  <main class="container">
-    <h2 class="section-title">Akun Tersedia</h2>
+  <main class="container" style="padding-top:0">
+
+    <!-- SPIN VOUCHER -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin:4px 0 10px">
+      <h2 class="section-title" style="margin:0;display:flex;align-items:center;gap:8px">
+        <i class="fa-solid fa-dharmachakra" style="color:#00e5ff"></i> Spin Voucher
+      </h2>
+      <a href="spin.html" style="color:#00b4ff;font-size:0.82rem;text-decoration:none;font-weight:600">Buka →</a>
+    </div>
+    <a href="spin.html" class="spin-home-card" style="display:flex;align-items:center;gap:14px;padding:14px;margin-bottom:20px;border-radius:16px;text-decoration:none;background:linear-gradient(135deg,#12122a 0%,#1a0a20 50%,#0a1520 100%);border:1px solid rgba(0,180,255,0.25);box-shadow:0 8px 28px rgba(0,0,0,0.35);overflow:hidden;position:relative">
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 20% 50%,rgba(0,180,255,0.12),transparent 55%),radial-gradient(circle at 80% 30%,rgba(0,180,255,0.1),transparent 50%);pointer-events:none"></div>
+      <div style="position:relative;width:88px;height:88px;flex-shrink:0;z-index:1">
+        <div style="width:88px;height:88px;border-radius:50%;background:conic-gradient(#90ff00 0 45deg,#25d366 45deg 90deg,#ffaa00 90deg 135deg,#00f5f9 135deg 180deg,#444466 180deg 225deg,#ff00b3 225deg 270deg,#b91dae 270deg 315deg,#0001ff 315deg 360deg);box-shadow:0 0 0 3px rgba(0,180,255,0.35),0 0 18px rgba(0,180,255,0.25);animation:spinHomeIdle 12s linear infinite"></div>
+        <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;background:#0a1520;border:2px solid #00d4ff;display:flex;align-items:center;justify-content:center;font-size:0.55rem;font-weight:800;color:#7ef0ff">SPIN</div>
+      </div>
+      <div style="flex:1;z-index:1;min-width:0">
+        <div style="font-size:0.72rem;font-weight:700;color:#00e5ff;letter-spacing:1px;margin-bottom:2px">SPIN VOUCHER</div>
+        <div style="font-size:1.05rem;font-weight:800;color:#fff;line-height:1.25;margin-bottom:4px">Putar Roda, Dapat Diskon!</div>
+        <div style="font-size:0.8rem;color:#aaa;margin-bottom:10px">Voucher 10% – 30% · Tiket Rp 15.000 · 3× spin</div>
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;background:linear-gradient(135deg,#00b4ff,#00e5ff);color:#fff;font-size:0.8rem;font-weight:700">
+          Gas putar <i class="fa-solid fa-chevron-right" style="font-size:0.7rem"></i>
+        </span>
+      </div>
+    </a>
+    <style>@keyframes spinHomeIdle{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}</style>
+
+    <h2 class="section-title" id="produkSection">Akun Tersedia</h2>
+    <p class="filter-result-info" id="filterInfo"></p>
     <div class="produk-grid" id="produkGrid">
       <!-- diisi oleh produk.js + script.js -->
     </div>
   </main>
-
- <!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   
-<!-- BOTTOM NAV -->
-<nav class="bottom-nav">
-
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav bottom-nav-6">
     <a href="index.html" class="nav-item active">
-        <i class="fa-solid fa-house"></i>
-        <span>Beranda</span>
+      <i class="fa-solid fa-house"></i>
+      <span>Beranda</span>
     </a>
-
-    <a href="kontak.html" class="nav-item">
-        <i class="fa-solid fa-headset"></i>
-        <span>Kontak CS</span>
+    <a href="game.html" class="nav-item">
+      <i class="fa-solid fa-gamepad"></i>
+      <span>Game</span>
     </a>
-
+    <a href="komunitas.html" class="nav-item">
+      <i class="fa-solid fa-comments"></i>
+      <span>Komunikasi</span>
+    </a>
     <a href="tentang.html" class="nav-item">
-        <i class="fa-solid fa-circle-info"></i>
-        <span>Tentang</span>
+      <i class="fa-solid fa-circle-info"></i>
+      <span>Tentang</span>
     </a>
+    <a href="kontak.html" class="nav-item">
+      <i class="fa-solid fa-headset"></i>
+      <span>Kontak</span>
+    </a>
+    <a href="login.html" class="nav-item">
+      <i class="fa-solid fa-user"></i>
+      <span>Akun</span>
+    </a>
+  </nav>
 
-</nav>
-
+  <script src="firebase.js"></script>
   <script src="produk.js"></script>
   <script src="script.js"></script>
+  <script>
+    // ===== Filter & Search override =====
+    (function() {
+      let currentTag = 'all';
+      let currentQuery = '';
+
+      function applyFilter() {
+        const grid = document.getElementById('produkGrid');
+        const info = document.getElementById('filterInfo');
+        if (!grid || typeof getAllProduk !== 'function') return;
+
+        let list = typeof filterProdukByTag === 'function'
+          ? filterProdukByTag(currentTag)
+          : getAllProduk();
+
+        if (currentQuery) {
+          const q = currentQuery.toLowerCase();
+          list = list.filter(p => {
+            const text = [
+              p.nama, p.subtitle, p.game, p.kategori, p.cocokUntuk,
+              ...(p.tags || []), ...(p.spek || [])
+            ].join(' ').toLowerCase();
+            return text.includes(q);
+          });
+        }
+
+        // Re-render using existing logic if possible, else simple render
+        if (typeof renderProdukList === 'function' && !currentQuery && currentTag === 'all') {
+          renderProdukList();
+          if (info) info.style.display = 'none';
+          return;
+        }
+
+        grid.innerHTML = '';
+        if (list.length === 0) {
+          grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#888;padding:30px 10px">Tidak ada produk yang cocok.</p>';
+          if (info) {
+            info.style.display = 'block';
+            info.textContent = '0 produk ditemukan';
+          }
+          return;
+        }
+
+        list.forEach((p) => {
+          const card = document.createElement('div');
+          card.className = 'produk-card' + (p.badge ? ' has-flash' : '');
+          const badgeHtml = p.badge
+            ? `<span class="produk-badge flash"><i class="fa-solid fa-fire"></i> ${p.badge}</span>`
+            : '';
+          const kategoriHtml = p.kategori
+            ? `<span class="produk-kategori">${p.kategori}</span>`
+            : '';
+          let diskonHtml = '';
+          if (p.hargaAsli && p.harga && p.hargaAsli > p.harga) {
+            const hemat = p.hargaAsli - p.harga;
+            diskonHtml = `
+              <div class="harga-wrap">
+                <span class="harga-asli">${p.hargaAsliFormatted}</span>
+                <span class="harga">${p.hargaFormatted}</span>
+              </div>
+              <div class="produk-hemat">Hemat Rp ${hemat.toLocaleString('id-ID')}</div>
+            `;
+          } else {
+            diskonHtml = `<div class="harga">${p.hargaFormatted || ''}</div>`;
+          }
+          const cocokHtml = p.cocokUntuk
+            ? `<div class="produk-cocok">${p.cocokUntuk}</div>`
+            : '';
+          const st = typeof getProductStats === 'function' ? getProductStats(p.id) : { views: 0, likes: 0 };
+          const liked = typeof hasUserLiked === 'function' ? hasUserLiked(p.id).liked : false;
+          const safeId = encodeURIComponent(p.id);
+
+          card.innerHTML = `
+            <a class="produk-card-link" href="detail.html?id=${safeId}">
+              <div class="produk-img-wrap">
+                <img src="${p.thumbnail}" alt="${p.nama}" loading="lazy">
+                ${badgeHtml}
+              </div>
+              <div class="produk-info">
+                ${kategoriHtml}
+                <div class="game-name">${p.nama}</div>
+                <div class="subtitle-small">${p.subtitle || ''}</div>
+                ${cocokHtml}
+                ${diskonHtml}
+              </div>
+            </a>
+            <div class="produk-stats" data-pid="${safeId}">
+              <span class="stat-views" title="Dilihat">
+                <i class="fa-solid fa-eye"></i>
+                <b class="stat-views-num">${typeof formatStatNum === 'function' ? formatStatNum(st.views) : st.views}</b>
+              </span>
+              <button type="button" class="stat-likes ${liked ? 'liked' : ''}" title="Suka" data-like-id="${safeId}">
+                <i class="fa-${liked ? 'solid' : 'regular'} fa-heart"></i>
+                <b class="stat-likes-num">${typeof formatStatNum === 'function' ? formatStatNum(st.likes) : st.likes}</b>
+              </button>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+
+        // re-bind likes
+        grid.querySelectorAll('[data-like-id]').forEach((btn) => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const pid = decodeURIComponent(btn.getAttribute('data-like-id'));
+            if (typeof toggleProductLike === 'function') {
+              toggleProductLike(pid);
+              applyFilter();
+            }
+          });
+        });
+
+        if (info) {
+          info.style.display = 'block';
+          info.textContent = list.length + ' produk ditemukan' +
+            (currentTag !== 'all' ? ' · filter: ' + currentTag : '') +
+            (currentQuery ? ' · "' + currentQuery + '"' : '');
+        }
+      }
+
+      // Chips
+      document.querySelectorAll('#chipsRow .chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          document.querySelectorAll('#chipsRow .chip').forEach(c => c.classList.remove('active'));
+          chip.classList.add('active');
+          currentTag = chip.getAttribute('data-tag') || 'all';
+          applyFilter();
+        });
+      });
+
+      // Search
+      const input = document.getElementById('searchInput');
+      const clearBtn = document.getElementById('searchClear');
+      if (input) {
+        input.addEventListener('input', () => {
+          currentQuery = input.value.trim();
+          if (clearBtn) clearBtn.style.display = currentQuery ? 'flex' : 'none';
+          applyFilter();
+        });
+      }
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+          input.value = '';
+          currentQuery = '';
+          clearBtn.style.display = 'none';
+          applyFilter();
+          input.focus();
+        });
+      }
+
+      // Initial (after script.js loads render)
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(applyFilter, 50);
+      });
+      // Also run if already loaded
+      if (document.readyState !== 'loading') {
+        setTimeout(applyFilter, 80);
+      }
+    })();
+  </script>
 </body>
 </html>

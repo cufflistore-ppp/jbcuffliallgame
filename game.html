@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CUFFLI Challenge — Game</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body data-page="game">
+
+  <header class="header">
+    <div class="logo-wrap">
+      <a href="index.html" style="display:flex;align-items:center;gap:10px">
+        <img class="logo-img" src="logo.png" alt="Logo" onerror="this.style.display='none'">
+        <span class="logo-text">CUFFLI ALL GAME</span>
+      </a>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="btnNotif" onclick="toggleNotifPanel()" title="Notifikasi">
+        <i class="fa-solid fa-bell"></i>
+        <span class="badge" id="notifBadge" style="display:none">0</span>
+      </button>
+      <button class="btn-login" id="btnLogin" onclick="location.href='login.html'">
+        <i class="fa-solid fa-user"></i> Login
+      </button>
+      <div class="user-area" id="userArea" style="display:none">
+        <span class="user-name" id="userName">User</span>
+        <button class="icon-btn" onclick="logoutUser()" title="Logout">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container game-page" style="padding-bottom:90px">
+
+    <h1 class="spin-title"><i class="fa-solid fa-gamepad"></i> CUFFLI Challenge</h1>
+    <p class="spin-desc">Main mini-game → dapat EXP → naik level → dapat <strong>voucher diskon</strong> (max 25% di Level 100) untuk belanja di marketplace.</p>
+
+    <!-- HUD Level -->
+    <div class="game-hud">
+      <div class="game-hud-top">
+        <div>
+          <div class="game-hud-label">Pemain</div>
+          <div class="game-hud-name" id="gameUserName">—</div>
+        </div>
+        <div class="game-level-badge">
+          <span>LV</span>
+          <strong id="gameLevel">1</strong>
+        </div>
+      </div>
+      <div class="game-exp-wrap">
+        <div class="game-exp-text">
+          <span>EXP</span>
+          <span id="gameExp">0 / 40</span>
+        </div>
+        <div class="game-exp-bar-bg">
+          <div class="game-exp-bar" id="gameExpBar" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="game-hud-stats">
+        <div class="hud-stat">
+          <div class="hud-stat-val" id="gameDiscount">0%</div>
+          <div class="hud-stat-label">Voucher</div>
+        </div>
+        <div class="hud-stat">
+          <div class="hud-stat-val" id="gameStreak">0</div>
+          <div class="hud-stat-label">Streak</div>
+        </div>
+      </div>
+      <div class="game-stats-line" id="gameStats"></div>
+    </div>
+
+    <!-- Challenge list -->
+    <h2 class="section-title">Pilih Challenge</h2>
+    <div class="challenge-grid">
+      <button class="challenge-card" onclick="startHitungCepat()">
+        <div class="cc-icon">🧮</div>
+        <div class="cc-name">Hitung Cepat</div>
+        <div class="cc-exp">+15 EXP</div>
+      </button>
+      <button class="challenge-card" onclick="startTebakKata()">
+        <div class="cc-icon">🔤</div>
+        <div class="cc-name">Tebak Kata</div>
+        <div class="cc-exp">+20 EXP</div>
+      </button>
+      <button class="challenge-card" onclick="startTebakEmoji()">
+        <div class="cc-icon">😎</div>
+        <div class="cc-name">Tebak Emoji</div>
+        <div class="cc-exp">+28 EXP</div>
+      </button>
+      <button class="challenge-card" onclick="startMemory()">
+        <div class="cc-icon">🃏</div>
+        <div class="cc-name">Memory Card</div>
+        <div class="cc-exp">+33 EXP</div>
+      </button>
+      <button class="challenge-card" onclick="startTebakPlanet()">
+        <div class="cc-icon">🪐</div>
+        <div class="cc-name">Tebak Planet</div>
+        <div class="cc-exp">+22 EXP</div>
+      </button>
+      <button class="challenge-card" onclick="startPuzzle()">
+        <div class="cc-icon">🧩</div>
+        <div class="cc-name">Puzzle Game</div>
+        <div class="cc-exp">+35 EXP</div>
+      </button>
+    </div>
+
+    <!-- Area challenge aktif -->
+    <div id="challengeArea" style="display:none; margin-top:16px"></div>
+
+    <!-- Mabar / Kerja sama -->
+    <div id="mabarPanel" style="margin-top:20px"></div>
+
+    <!-- Misi Harian -->
+    <h2 class="section-title" style="margin-top:24px">Misi Harian</h2>
+    <div id="dailyMissions" class="daily-missions"></div>
+
+    <!-- Leaderboard Global -->
+    <h2 class="section-title" style="margin-top:24px">
+      <i class="fa-solid fa-trophy" style="color:#ffaa00"></i> Leaderboard
+    </h2>
+    <p id="myRankText" class="lb-my-rank">—</p>
+    <div id="leaderboardList" class="leaderboard-list">
+      <p class="voucher-empty">Memuat ranking...</p>
+    </div>
+    <p style="font-size:11px;color:#666;text-align:center;margin-top:6px">
+      Diurutkan dari level tertinggi, lalu total EXP. Update otomatis saat main.
+    </p>
+
+    <!-- Tabel reward -->
+    <h2 class="section-title" style="margin-top:24px">Reward Voucher per Level</h2>
+    <div class="reward-table">
+      <div class="reward-row head"><span>Level</span><span>Diskon</span></div>
+      <div class="reward-row" data-level="1"><span>1 – 9</span><span>0%</span></div>
+      <div class="reward-row" data-level="10"><span>10</span><span>5%</span></div>
+      <div class="reward-row" data-level="20"><span>20</span><span>10%</span></div>
+      <div class="reward-row" data-level="40"><span>40</span><span>15%</span></div>
+      <div class="reward-row" data-level="70"><span>70</span><span>20%</span></div>
+      <div class="reward-row" data-level="100"><span>100</span><span>25% MAX</span></div>
+    </div>
+    <p style="font-size:12px;color:#888;margin-top:8px;text-align:center">
+      Voucher hanya di level milestone. <strong>25% hanya di Level 100</strong> — naik level jauh lebih susah.
+      Voucher masuk ke akun & bisa dipakai saat beli produk.
+    </p>
+
+    <div class="info-card" style="margin-top:16px">
+      <h3><i class="fa-solid fa-circle-info"></i> Cara Main</h3>
+      <p>
+        1. Login di menu Akun<br>
+        2. Pilih challenge & mainkan<br>
+        3. Benar = EXP penuh · Salah = +1 EXP saja<br>
+        4. Naik level → voucher di milestone (10 / 20 / 40 / 70 / 100)<br>
+        5. Voucher 25% hanya di Level 100<br>
+        6. Pakai voucher di halaman pembayaran produk
+      </p>
+    </div>
+  </main>
+
+            <nav class="bottom-nav bottom-nav-6">
+    <a href="index.html" class="nav-item">
+      <i class="fa-solid fa-house"></i>
+      <span>Beranda</span>
+    </a>
+    <a href="game.html" class="nav-item active">
+      <i class="fa-solid fa-gamepad"></i>
+      <span>Game</span>
+    </a>
+    <a href="komunitas.html" class="nav-item">
+      <i class="fa-solid fa-comments"></i>
+      <span>Komunikasi</span>
+    </a>
+    <a href="tentang.html" class="nav-item">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>Tentang</span>
+    </a>
+    <a href="kontak.html" class="nav-item">
+      <i class="fa-solid fa-headset"></i>
+      <span>Kontak</span>
+    </a>
+    <a href="login.html" class="nav-item">
+      <i class="fa-solid fa-user"></i>
+      <span>Akun</span>
+    </a>
+  </nav>
+
+  <script src="firebase.js"></script>
+  <script src="produk.js"></script>
+  <script src="script.js"></script>
+  <script src="spin.js"></script>
+  <script src="game.js"></script>
+  <script src="mabar.js"></script>
+</body>
+</html>

@@ -5,6 +5,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kontak — CUFFLI ALL GAME</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    .contact-btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 14px;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: transform 0.15s, box-shadow 0.15s;
+      border: none;
+      cursor: pointer;
+      box-sizing: border-box;
+    }
+    .contact-btn:active { transform: scale(0.98); }
+    .contact-btn .cb-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      background: rgba(255,255,255,0.18);
+      flex-shrink: 0;
+    }
+    .contact-btn .cb-text { flex: 1; text-align: left; }
+    .contact-btn .cb-text small {
+      display: block;
+      font-weight: 500;
+      font-size: 0.75rem;
+      opacity: 0.85;
+      margin-top: 2px;
+    }
+    .contact-btn .cb-arrow { opacity: 0.7; font-size: 0.9rem; }
+    .contact-btn.wa1 {
+      background: linear-gradient(135deg, #128c7e, #25d366);
+      box-shadow: 0 4px 16px rgba(37,211,102,0.3);
+    }
+    .contact-btn.wa2 {
+      background: linear-gradient(135deg, #0d7377, #14a3a8);
+      box-shadow: 0 4px 16px rgba(20,163,168,0.3);
+    }
+    .contact-btn.tg {
+      background: linear-gradient(135deg, #0088cc, #2aabee);
+      box-shadow: 0 4px 16px rgba(42,171,238,0.3);
+    }
+    .contact-stack { display: flex; flex-direction: column; gap: 12px; margin: 16px 0 20px; }
+    .jam-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.9rem;
+    }
+    .jam-row:last-child { border-bottom: none; }
+    .jam-row span:last-child { color: #00b4ff; font-weight: 600; }
+  </style>
 </head>
 <body data-page="kontak">
 
@@ -12,81 +75,126 @@
   <header class="header">
     <div class="logo-wrap">
       <a href="index.html" style="display:flex;align-items:center;gap:10px">
-        <img class="logo-img" src="logo.png" alt="Logo">
+        <img class="logo-img" src="logo.png" alt="Logo" onerror="this.style.display='none'">
         <span class="logo-text">CUFFLI ALL GAME</span>
       </a>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="btnNotif" onclick="toggleNotifPanel()" title="Notifikasi">
+        <i class="fa-solid fa-bell"></i>
+        <span class="badge" id="notifBadge" style="display:none">0</span>
+      </button>
+      <button class="btn-login" id="btnLogin" onclick="location.href='login.html'">
+        <i class="fa-solid fa-user"></i> Login
+      </button>
+      <div class="user-area" id="userArea" style="display:none">
+        <span class="user-name" id="userName">User</span>
+        <button class="icon-btn" onclick="logoutUser()" title="Logout">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
     </div>
   </header>
 
   <main class="page-content container">
     <h1>Hubungi Kami</h1>
-    <p>Ada pertanyaan soal akun atau mau order custom? Langsung chat admin aja.</p>
+    <p>
+      Ada pertanyaan soal akun, spin, game, atau order?
+      Klik tombol di bawah — langsung terbuka chat ke admin yang kamu pilih.
+    </p>
+
+    <div class="contact-stack">
+      <!-- WhatsApp Admin 1 → langsung ke WA Admin 1 -->
+      <a class="contact-btn wa1"
+         href="https://wa.me/6287722626689?text=Halo%20Admin%20Cuffli%201%2C%20saya%20mau%20tanya%20tentang%20CUFFLI%20ALL%20GAME"
+         target="_blank" rel="noopener">
+        <div class="cb-icon"><i class="fa-brands fa-whatsapp"></i></div>
+        <div class="cb-text">
+          WhatsApp Admin 1
+          <small>Admin Cuffli 1 · 0877-2262-6689</small>
+        </div>
+        <i class="fa-solid fa-arrow-up-right-from-square cb-arrow"></i>
+      </a>
+
+      <!-- WhatsApp Admin 2 → langsung ke WA Admin 2 -->
+      <a class="contact-btn wa2"
+         href="https://wa.me/62895352910438?text=Halo%20Admin%20Cuffli%202%2C%20saya%20mau%20tanya%20tentang%20CUFFLI%20ALL%20GAME"
+         target="_blank" rel="noopener">
+        <div class="cb-icon"><i class="fa-brands fa-whatsapp"></i></div>
+        <div class="cb-text">
+          WhatsApp Admin 2
+          <small>Admin Cuffli 2 · 0895-3529-10438</small>
+        </div>
+        <i class="fa-solid fa-arrow-up-right-from-square cb-arrow"></i>
+      </a>
+
+      <!-- Telegram → langsung ke Telegram -->
+      <a class="contact-btn tg"
+         href="https://t.me/cuffliallgame"
+         target="_blank" rel="noopener">
+        <div class="cb-icon"><i class="fa-brands fa-telegram"></i></div>
+        <div class="cb-text">
+          Telegram Admin
+          <small>@cuffliallgame · buka di Telegram</small>
+        </div>
+        <i class="fa-solid fa-arrow-up-right-from-square cb-arrow"></i>
+      </a>
+    </div>
 
     <div class="info-card">
-      <h3>WhatsApp Admin¹</h3>
+      <h3><i class="fa-solid fa-clock"></i> Jam Operasional</h3>
+      <div class="jam-row">
+        <span>Hari Biasa</span>
+        <span>15.00 – 21.00 WIB</span>
+      </div>
+      <div class="jam-row">
+        <span>Hari Libur</span>
+        <span>08.00 – 22.00 WIB</span>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h3><i class="fa-solid fa-circle-info"></i> Catatan</h3>
       <p>
-        <a href="https://wa.me/6287722626689" target="_blank" rel="noopener">
-          wa.me/6287722626689
-        </a>
+        • Klik tombol WA → langsung buka chat ke admin tersebut<br>
+        • Admin 1 & Admin 2 menangani produk berbeda (lihat di detail produk)<br>
+        • Balasan biasanya &lt; 5–10 menit saat jam operasional<br>
+        • Di luar jam, dibalas keesokan harinya<br>
+        • Chat CS di pojok kanan bawah = Asisten Cuffli (AI, info produk/spin/game)
       </p>
-    </div>
-
-        <div class="info-card">
-      <h3>WhatsApp Admin²</h3>
-      <p>
-        <a href="https://wa.me/62895352910438" target="_blank" rel="noopener">
-          wa.me/62895352910438
-        </a>
-      </p>
-    </div>
-
-        <div class="info-card">
-      <h3>Telegram Admin</h3>
-      <p>
-        <a href="https://t.me/cuffliallgame" target="_blank" rel="noopener">
-        t.me/cuffliallgame
-        </a>
-      </p>
-   </div>
-    
-    <div class="info-card">
-      <h3>Jam Hari Biasa</h3>
-      <p>Hari Biasa 15.00 – 21.00 WIB</p>
-    </div>
-
-    <div class="info-card">
-      <h3>Jam Hari Libur</h3>
-      <p>Hari Libur 8.00 – 22.00 WIB</p>
-    </div>
-
-    <div class="info-card">
-      <h3>Catatan</h3>
-      <p>Balasan biasanya &lt; 5/10 menit saat jam operasional. Di luar jam, akan dibalas keesokan harinya.</p>
     </div>
   </main>
 
- <!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  
-<!-- BOTTOM NAV -->
-<nav class="bottom-nav">
-
+  <!-- BOTTOM NAV -->
+            <nav class="bottom-nav bottom-nav-6">
     <a href="index.html" class="nav-item">
-        <i class="fa-solid fa-house"></i>
-        <span>Beranda</span>
+      <i class="fa-solid fa-house"></i>
+      <span>Beranda</span>
     </a>
-
-    <a href="kontak.html" class="nav-item active">
-        <i class="fa-solid fa-headset"></i>
-        <span>Kontak CS</span>
+    <a href="game.html" class="nav-item">
+      <i class="fa-solid fa-gamepad"></i>
+      <span>Game</span>
     </a>
-
+    <a href="komunitas.html" class="nav-item">
+      <i class="fa-solid fa-comments"></i>
+      <span>Komunikasi</span>
+    </a>
     <a href="tentang.html" class="nav-item">
-        <i class="fa-solid fa-circle-info"></i>
-        <span>Tentang</span>
+      <i class="fa-solid fa-circle-info"></i>
+      <span>Tentang</span>
     </a>
+    <a href="kontak.html" class="nav-item active">
+      <i class="fa-solid fa-headset"></i>
+      <span>Kontak</span>
+    </a>
+    <a href="login.html" class="nav-item">
+      <i class="fa-solid fa-user"></i>
+      <span>Akun</span>
+    </a>
+  </nav>
 
-</nav>
-
+  <script src="firebase.js"></script>
+  <script src="produk.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

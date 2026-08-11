@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spin Voucher — CUFFLI ALL GAME</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body data-page="spin">
+
+  <header class="header">
+    <div class="logo-wrap">
+      <a href="index.html" style="display:flex;align-items:center;gap:10px">
+        <img class="logo-img" src="logo.png" alt="Logo" onerror="this.style.display='none'">
+        <span class="logo-text">CUFFLI ALL GAME</span>
+      </a>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="btnNotif" onclick="toggleNotifPanel()" title="Notifikasi">
+        <i class="fa-solid fa-bell"></i>
+        <span class="badge" id="notifBadge" style="display:none">0</span>
+      </button>
+      <button class="btn-login" id="btnLogin" onclick="location.href='login.html'">
+        <i class="fa-solid fa-user"></i> Login
+      </button>
+      <div class="user-area" id="userArea" style="display:none">
+        <span class="user-name" id="userName">User</span>
+        <button class="icon-btn" onclick="logoutUser()" title="Logout">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="spin-page container">
+    <h1 class="spin-title"><i class="fa-solid fa-dharmachakra"></i> Spin Voucher</h1>
+    <p class="spin-desc">Bayar Rp 15.000 dapat <strong>3x Spin</strong>. Bisa Zonk atau Voucher diskon 10–30%!</p>
+
+    <!-- Status user -->
+    <div class="spin-status" id="spinStatus">
+      <div class="spin-status-item">
+        <span class="label">Status</span>
+        <span class="value" id="spinStatusText">Belum login</span>
+      </div>
+      <div class="spin-status-item">
+        <span class="label">Sisa Spin</span>
+        <span class="value" id="spinSisaText">0</span>
+      </div>
+    </div>
+
+    <!-- Roda Spin — premium -->
+    <div class="wheel-stage" id="wheelStage">
+      <div class="wheel-glow"></div>
+      <div class="wheel-lights" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+      </div>
+      <div class="wheel-wrap">
+        <div class="wheel-pointer">
+          <div class="pointer-tip"></div>
+        </div>
+        <canvas id="wheelCanvas" width="360" height="360"></canvas>
+        <div class="wheel-hub-ring"></div>
+      </div>
+    </div>
+
+    <button class="btn-spin" id="btnSpin" disabled>
+      <span class="btn-spin-glow"></span>
+      <i class="fa-solid fa-dharmachakra"></i>
+      <span>SPIN!</span>
+    </button>
+
+    <!-- Redeem kode + beli spin -->
+    <div class="spin-buy-box" id="spinBuyBox">
+      <p class="redeem-label">Masukkan kode redeem (1× pakai)</p>
+      <p class="redeem-example">Contoh: CUFFLI-SPIN-A1B2</p>
+      <div class="redeem-row">
+        <input type="text" id="redeemCodeInput" class="redeem-input" placeholder="Tulis kode di sini..." autocomplete="off" spellcheck="false">
+        <button class="btn-primary btn-redeem" id="btnRedeemCode" type="button">
+          <i class="fa-solid fa-key"></i> Redeem Kode
+        </button>
+      </div>
+      <div id="redeemMsg" class="auth-error redeem-msg"></div>
+
+      <div class="redeem-buy-sep">
+        <p class="redeem-buy-hint">Belum punya kode? Bayar dulu, admin kasih kode via WA.</p>
+        <button class="btn-primary btn-beli-kode" id="btnBeliSpin">
+          <i class="fa-solid fa-ticket"></i> Beli Kode — Rp 15.000
+        </button>
+      </div>
+    </div>
+
+    <!-- Hasil terakhir -->
+    <div class="spin-result" id="spinResult" style="display:none">
+      <div class="spin-result-icon" id="spinResultIcon"></div>
+      <div class="spin-result-text" id="spinResultText"></div>
+    </div>
+
+    <!-- Voucher milik user -->
+    <div class="voucher-section">
+      <h2 class="section-title">Voucher Kamu</h2>
+      <div id="voucherList" class="voucher-list">
+        <p class="voucher-empty">Belum ada voucher. Spin dulu ya!</p>
+      </div>
+    </div>
+
+    <!-- PANEL ADMIN: ambil kode manual / generate (buka dengan PIN) -->
+    <div class="admin-spin-panel" id="adminSpinPanel" style="display:none">
+      <h2 class="section-title"><i class="fa-solid fa-user-shield"></i> Panel Admin — Kasih Kode Spin</h2>
+
+      <!-- Kunci PIN -->
+      <div id="adminLockBox">
+        <p class="admin-spin-hint">Masukkan PIN admin untuk lihat & kasih kode ke pembeli.</p>
+        <div class="admin-gen-row">
+          <input type="password" id="adminPinInput" class="redeem-input" placeholder="PIN admin" autocomplete="off">
+          <button type="button" class="btn-primary" id="btnAdminUnlock">
+            <i class="fa-solid fa-unlock"></i> Buka Panel
+          </button>
+        </div>
+        <div id="adminPinMsg" class="auth-error redeem-msg"></div>
+      </div>
+
+      <!-- Tools setelah unlock -->
+      <div id="adminToolsBox" style="display:none">
+        <p class="admin-spin-hint">
+          Setelah pembeli bayar Rp 15.000: buat/salin 1 kode, kirim ke WA pembeli.
+          1 kode = 1× pakai. Kalau sudah dipakai orang lain → invalid.
+        </p>
+
+        <h3 class="admin-list-title">1. Buat kode (isi sendiri atau kosong = acak)</h3>
+        <div class="admin-gen-row">
+          <input type="text" id="adminCustomCode" class="redeem-input" placeholder="Contoh: CUFFLI-SPIN-BERBAYAR" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="admin-gen-row">
+          <input type="text" id="adminForUsername" class="redeem-input" placeholder="Username pembeli (opsional)" autocomplete="off">
+          <button type="button" class="btn-primary" id="btnAdminGenerate">
+            <i class="fa-solid fa-plus"></i> Simpan Kode
+          </button>
+        </div>
+        <div id="adminGenerateMsg" class="auth-error redeem-msg"></div>
+        <div class="admin-latest-code" id="adminLatestCode" style="display:none"></div>
+
+        <h3 class="admin-list-title" style="margin-top:16px">2. Kode cadangan (siap salin)</h3>
+        <div id="adminManualCodeList" class="admin-code-list"></div>
+
+        <h3 class="admin-list-title" style="margin-top:16px">3. Riwayat kode yang kamu buat</h3>
+        <div id="adminCodeList" class="admin-code-list"></div>
+      </div>
+    </div>
+
+    <div class="info-card" style="margin-top:16px">
+      <h3><i class="fa-solid fa-circle-info"></i> Cara Main</h3>
+      <p>
+        1. Login dulu di menu Akun<br>
+        2. Bayar Rp 15.000 → konfirmasi ke admin WA<br>
+        3. Admin kasih <strong>kode redeem</strong> (1 kode = 1x pakai)<br>
+        4. Masukkan kode di atas → dapat 3x spin<br>
+        5. Klik SPIN — hasil tergantung hoki<br>
+        6. Zonk = kosong · Voucher 10–30% = diskon belanja
+      </p>
+    </div>
+
+    <div class="info-card" style="margin-top:12px">
+      <h3><i class="fa-solid fa-ticket"></i> Cara Tukar Voucher</h3>
+      <p>
+        1. Dapat voucher dari spin (kode muncul di sini)<br>
+        2. Buka menu <strong>Beranda</strong> → pilih produk yang mau dibeli<br>
+        3. Di halaman pembayaran, pilih voucher di dropdown <strong>“Pakai Voucher Spin”</strong><br>
+        4. Harga otomatis potong sesuai persen voucher<br>
+        5. Transfer sesuai harga yang muncul, lalu konfirmasi ke admin via WhatsApp<br>
+        6. Voucher otomatis tertandai sudah dipakai
+      </p>
+      <p style="margin-top:8px; color:#25d366; font-size:13px;">
+        <i class="fa-solid fa-check"></i> Voucher hanya bisa dipakai 1x dan tersimpan di akun kamu.
+      </p>
+    </div>
+  </main>
+
+                <nav class="bottom-nav bottom-nav-6">
+    <a href="index.html" class="nav-item active">
+      <i class="fa-solid fa-house"></i>
+      <span>Beranda</span>
+    </a>
+    <a href="game.html" class="nav-item">
+      <i class="fa-solid fa-gamepad"></i>
+      <span>Game</span>
+    </a>
+    <a href="komunitas.html" class="nav-item">
+      <i class="fa-solid fa-comments"></i>
+      <span>Komunikasi</span>
+    </a>
+    <a href="tentang.html" class="nav-item">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>Tentang</span>
+    </a>
+    <a href="kontak.html" class="nav-item">
+      <i class="fa-solid fa-headset"></i>
+      <span>Kontak</span>
+    </a>
+    <a href="login.html" class="nav-item">
+      <i class="fa-solid fa-user"></i>
+      <span>Akun</span>
+    </a>
+  </nav>
+
+  <script src="firebase.js"></script>
+  <script src="produk.js"></script>
+  <script src="script.js"></script>
+  <script src="spin.js"></script>
+</body>
+</html>

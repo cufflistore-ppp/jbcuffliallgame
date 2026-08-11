@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Detail Akun — CUFFLI ALL GAME</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body data-page="detail">
 
@@ -12,58 +13,121 @@
   <header class="header">
     <div class="logo-wrap">
       <a href="index.html" style="display:flex;align-items:center;gap:10px">
-        <img class="logo-img" src="logo.png" alt="Logo">
+        <img class="logo-img" src="logo.png" alt="Logo" onerror="this.style.display='none'">
         <span class="logo-text">CUFFLI ALL GAME</span>
       </a>
     </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="btnNotif" onclick="toggleNotifPanel()" title="Notifikasi">
+        <i class="fa-solid fa-bell"></i>
+        <span class="badge" id="notifBadge" style="display:none">0</span>
+      </button>
+      <button class="btn-login" id="btnLogin" onclick="location.href='login.html'">
+        <i class="fa-solid fa-user"></i> Login
+      </button>
+      <div class="user-area" id="userArea" style="display:none">
+        <span class="user-name" id="userName">User</span>
+        <button class="icon-btn" onclick="logoutUser()" title="Logout">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
+    </div>
   </header>
 
-  <!-- GALLERY 5 FOTO -->
+  <!-- GALLERY -->
   <div class="detail-gallery">
-    <div class="detail-gallery-track" id="galleryTrack">
-      <!-- diisi JS -->
-    </div>
+    <div class="detail-gallery-track" id="galleryTrack"></div>
   </div>
   <div class="gallery-dots" id="galleryDots"></div>
 
   <!-- DETAIL BODY -->
   <div class="detail-body">
+    <div id="detailBadges" class="detail-badges"></div>
+    <span class="detail-kategori" id="detailKategori" style="display:none"></span>
     <h1 class="detail-nama" id="detailNama">—</h1>
     <p class="detail-subtitle" id="detailSubtitle">—</p>
+    <p class="detail-cocok" id="detailCocok" style="display:none"></p>
     <div class="detail-harga" id="detailHarga">—</div>
+    <div class="detail-hemat" id="detailHemat" style="display:none"></div>
+
+    <!-- Views & Likes -->
+    <div class="detail-stats" id="detailStats">
+      <span class="stat-views" title="Dilihat">
+        <i class="fa-solid fa-eye"></i>
+        <b id="detailViewsNum">0</b>
+        <small>dilihat</small>
+      </span>
+      <button type="button" class="stat-likes" id="detailLikeBtn" title="Suka">
+        <i class="fa-regular fa-heart" id="detailLikeIcon"></i>
+        <b id="detailLikesNum">0</b>
+        <small>suka</small>
+      </button>
+    </div>
+
     <p class="detail-deskripsi" id="detailDeskripsi">—</p>
 
     <h2 class="section-title">Spesifikasi Akun</h2>
-    <ul class="spek-list" id="detailSpek">
-      <!-- diisi JS -->
-    </ul>
+    <ul class="spek-list" id="detailSpek"></ul>
 
-    <button class="btn-beli" id="btnBeli">Beli Sekarang</button>
+    <!-- ADMIN CARD -->
+    <h2 class="section-title">Admin Penanggung Jawab</h2>
+    <div class="admin-card" id="adminCard">
+      <img class="admin-foto" id="adminFoto" src="" alt="Admin">
+      <div class="admin-info">
+        <div class="admin-nama" id="adminNama">—</div>
+        <div class="admin-role">CS & Seller Produk Ini</div>
+        <a class="btn-chat-admin" id="btnChatAdmin" href="#" target="_blank" rel="noopener">
+          <i class="fa-brands fa-whatsapp"></i> Chat Admin WA
+        </a>
+      </div>
+    </div>
+
+    <button class="btn-beli" id="btnBeli">
+      <i class="fa-solid fa-qrcode"></i> Bungkus Sekarang — Langsung QR
+    </button>
+
+    <!-- Produk terkait (game yang sama) -->
+    <div class="related-section" id="relatedSection" style="display:none">
+      <h2 class="section-title" style="margin-top:28px">
+        <i class="fa-solid fa-gamepad" style="color:#00b4ff"></i>
+        Produk Terkait <span id="relatedGameLabel" style="color:#00b4ff;font-weight:600"></span>
+      </h2>
+      <p class="related-hint" style="font-size:0.8rem;color:#888;margin:-6px 0 12px">
+        Akun lain dari game yang sama
+      </p>
+      <div class="related-grid" id="relatedGrid"></div>
+    </div>
   </div>
 
- <!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  
-<!-- BOTTOM NAV -->
-<nav class="bottom-nav">
-
+  <!-- BOTTOM NAV -->
+                  <nav class="bottom-nav bottom-nav-6">
     <a href="index.html" class="nav-item active">
-        <i class="fa-solid fa-house"></i>
-        <span>Beranda</span>
+      <i class="fa-solid fa-house"></i>
+      <span>Beranda</span>
     </a>
-
-    <a href="kontak.html" class="nav-item">
-        <i class="fa-solid fa-headset"></i>
-        <span>Kontak CS</span>
+    <a href="game.html" class="nav-item">
+      <i class="fa-solid fa-gamepad"></i>
+      <span>Game</span>
     </a>
-
+    <a href="komunitas.html" class="nav-item">
+      <i class="fa-solid fa-comments"></i>
+      <span>Komunikasi</span>
+    </a>
     <a href="tentang.html" class="nav-item">
-        <i class="fa-solid fa-circle-info"></i>
-        <span>Tentang</span>
+      <i class="fa-solid fa-circle-info"></i>
+      <span>Tentang</span>
     </a>
+    <a href="kontak.html" class="nav-item">
+      <i class="fa-solid fa-headset"></i>
+      <span>Kontak</span>
+    </a>
+    <a href="login.html" class="nav-item">
+      <i class="fa-solid fa-user"></i>
+      <span>Akun</span>
+    </a>
+  </nav>
 
-</nav>
-
+  <script src="firebase.js"></script>
   <script src="produk.js"></script>
   <script src="script.js"></script>
 </body>

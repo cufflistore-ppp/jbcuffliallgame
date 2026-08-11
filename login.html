@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Akun — CUFFLI ALL GAME</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    /* Login tambahan: Google + Phone */
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 18px 0 14px;
+      color: var(--text-muted, #888);
+      font-size: 13px;
+    }
+    .auth-divider::before,
+    .auth-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.12);
+    }
+    .btn-google {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: #fff;
+      color: #222;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .btn-google:hover { background: #f5f5f5; }
+    .btn-google img { width: 20px; height: 20px; }
+    .btn-google:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .auth-method-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .auth-method-tab {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      color: var(--text-muted, #aaa);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .auth-method-tab.active {
+      background: rgba(37, 211, 102, 0.15);
+      border-color: #25d366;
+      color: #25d366;
+    }
+    .phone-step { display: none; }
+    .phone-step.active { display: block; }
+    .otp-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .otp-row input {
+      flex: 1;
+      text-align: center;
+      letter-spacing: 4px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .btn-link-resend {
+      background: none;
+      border: none;
+      color: #25d366;
+      font-size: 13px;
+      margin-top: 10px;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    #recaptcha-container { min-height: 1px; }
+  </style>
+</head>
+<body data-page="login">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo-wrap">
+      <a href="index.html" style="display:flex;align-items:center;gap:10px">
+        <img class="logo-img" src="logo.png" alt="Logo" onerror="this.style.display='none'">
+        <span class="logo-text">CUFFLI ALL GAME</span>
+      </a>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="btnNotif" onclick="toggleNotifPanel()" title="Notifikasi">
+        <i class="fa-solid fa-bell"></i>
+        <span class="badge" id="notifBadge" style="display:none">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="page-content container" style="padding-top:24px; padding-bottom:90px">
+
+    <!-- ========== BELUM LOGIN ========== -->
+    <div id="authSection">
+      <div class="auth-page-box">
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Masuk</button>
+          <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Daftar</button>
+        </div>
+
+        <div id="authError" class="auth-error"></div>
+
+        <!-- ===== TOMBOL GOOGLE (selalu tampil di atas) ===== -->
+        <button type="button" class="btn-google" id="btnGoogleLogin" onclick="doGoogleLogin()">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+          Lanjutkan dengan Google
+        </button>
+
+        <div class="auth-divider">atau</div>
+
+        <!-- Pilih metode: Username / Nomor HP -->
+        <div class="auth-method-tabs" id="methodTabs">
+          <button type="button" class="auth-method-tab active" id="methodUser" onclick="switchMethod('user')">
+            <i class="fa-solid fa-user"></i> Username
+          </button>
+          <button type="button" class="auth-method-tab" id="methodPhone" onclick="switchMethod('phone')">
+            <i class="fa-solid fa-phone"></i> Nomor HP
+          </button>
+        </div>
+
+        <!-- ===== FORM LOGIN USERNAME ===== -->
+        <form id="formLoginPage" class="auth-form">
+          <div id="pageLoginForm">
+            <div class="input-group">
+              <i class="fa-solid fa-user"></i>
+              <input type="text" id="loginUserPage" placeholder="contoh: cuffli123" autocomplete="username">
+            </div>
+            <div class="input-group">
+              <i class="fa-solid fa-lock"></i>
+              <input type="password" id="loginPassPage" placeholder="Password" autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn-primary">Masuk Sekarang</button>
+          </div>
+        </form>
+
+        <!-- ===== FORM LOGIN NOMOR HP ===== -->
+        <div id="phoneLoginBox" style="display:none">
+          <div id="phoneStep1" class="phone-step active">
+            <div class="input-group">
+              <i class="fa-solid fa-phone"></i>
+              <input type="tel" id="phoneInput" placeholder="08xxxxxxxxxx" autocomplete="tel">
+            </div>
+            <button type="button" class="btn-primary" id="btnSendOtp" onclick="doSendOtp()">Kirim Kode OTP</button>
+          </div>
+          <div id="phoneStep2" class="phone-step">
+            <p style="font-size:13px;color:#aaa;margin-bottom:10px">Masukkan 6 digit kode yang dikirim ke <strong id="phoneSentTo">—</strong></p>
+            <div class="input-group">
+              <i class="fa-solid fa-key"></i>
+              <input type="text" id="otpInput" placeholder="______" maxlength="6" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code">
+            </div>
+            <button type="button" class="btn-primary" id="btnVerifyOtp" onclick="doVerifyOtp()">Verifikasi & Masuk</button>
+            <button type="button" class="btn-link-resend" onclick="doSendOtp()">Kirim ulang kode</button>
+          </div>
+        </div>
+
+        <!-- reCAPTCHA (invisible) -->
+        <div id="recaptcha-container"></div>
+
+        <!-- ===== FORM DAFTAR (username) ===== -->
+        <form id="formRegisterPage" class="auth-form" style="display:none">
+          <div id="pageRegisterForm">
+            <div class="input-group">
+              <i class="fa-solid fa-id-card"></i>
+              <input type="text" id="regNamaPage" placeholder="contoh: cuffli123/Username kamu" required>
+            </div>
+            <div class="input-group">
+              <i class="fa-solid fa-user"></i>
+              <input type="text" id="regUserPage" placeholder="contoh: cuffli123" required autocomplete="username">
+            </div>
+            <div class="input-group">
+              <i class="fa-solid fa-lock"></i>
+              <input type="password" id="regPassPage" placeholder="Password (min 4 karakter)" required autocomplete="new-password">
+            </div>
+            <button type="submit" class="btn-primary">Daftar Sekarang</button>
+          </div>
+        </form>
+
+        <p class="auth-note">Login untuk order lebih cepat, dapat notifikasi, spin voucher, dan atur profil.</p>
+      </div>
+    </div>
+
+    <!-- ========== SUDAH LOGIN — PROFIL & PENGATURAN ========== -->
+    <div id="profileSection" style="display:none">
+
+      <!-- Kartu Profil -->
+      <div class="profile-card">
+        <div class="profile-avatar-wrap">
+          <div class="profile-avatar" id="profileAvatarBox">
+            <i class="fa-solid fa-user" id="profileAvatarIcon"></i>
+            <img id="profileAvatarImg" alt="Foto profil" style="display:none">
+          </div>
+          <label class="avatar-change-btn" for="avatarFileInput" title="Ganti foto profil">
+            <i class="fa-solid fa-camera"></i>
+          </label>
+          <input type="file" id="avatarFileInput" accept="image/*" style="display:none">
+        </div>
+        <div class="profile-info">
+          <div class="profile-name" id="profileNama">—</div>
+          <div class="profile-username" id="profileUsername">@—</div>
+          <div class="profile-id" id="profileId" style="font-size:12px;color:#888;margin-top:2px">ID: —</div>
+          <div class="profile-joined" id="profileJoined">Bergabung —</div>
+          <button type="button" class="btn-remove-avatar" id="btnRemoveAvatar" style="display:none" onclick="doRemoveAvatar()">
+            Hapus foto
+          </button>
+        </div>
+      </div>
+
+      <!-- Ringkasan -->
+      <div class="profile-stats">
+        <div class="profile-stat">
+          <div class="stat-value" id="statSpin">0</div>
+          <div class="stat-label">Sisa Spin</div>
+        </div>
+        <div class="profile-stat">
+          <div class="stat-value" id="statVoucher">0</div>
+          <div class="stat-label">Voucher Aktif</div>
+        </div>
+      </div>
+
+      <!-- Menu Pengaturan -->
+      <div class="settings-section">
+        <h2 class="section-title" style="margin-bottom:12px">Pengaturan Akun</h2>
+
+        <!-- Edit Profil -->
+        <div class="settings-card">
+          <div class="settings-header" onclick="toggleSettings('editProfile')">
+            <div class="settings-left">
+              <i class="fa-solid fa-user-pen"></i>
+              <span>Edit Profil</span>
+            </div>
+            <i class="fa-solid fa-chevron-down settings-arrow" id="arrow-editProfile"></i>
+          </div>
+          <div class="settings-body" id="body-editProfile" style="display:none">
+            <div class="input-group">
+              <i class="fa-solid fa-id-card"></i>
+              <input type="text" id="editNama" placeholder="contoh: Budi" maxlength="30">
+            </div>
+            <p class="settings-hint">Username tidak bisa diganti.</p>
+            <div id="editProfileMsg" class="auth-error" style="margin-bottom:8px"></div>
+            <button class="btn-primary" onclick="saveProfile()">Simpan Perubahan</button>
+          </div>
+        </div>
+
+        <!-- Ganti Sandi -->
+        <div class="settings-card">
+          <div class="settings-header" onclick="toggleSettings('changePass')">
+            <div class="settings-left">
+              <i class="fa-solid fa-key"></i>
+              <span>Ganti Sandi</span>
+            </div>
+            <i class="fa-solid fa-chevron-down settings-arrow" id="arrow-changePass"></i>
+          </div>
+          <div class="settings-body" id="body-changePass" style="display:none">
+            <div class="input-group">
+              <i class="fa-solid fa-lock"></i>
+              <input type="password" id="oldPass" placeholder="Password lama" autocomplete="current-password">
+            </div>
+            <div class="input-group">
+              <i class="fa-solid fa-lock"></i>
+              <input type="password" id="newPass" placeholder="Password baru (min 4)" autocomplete="new-password">
+            </div>
+            <div class="input-group">
+              <i class="fa-solid fa-lock"></i>
+              <input type="password" id="newPass2" placeholder="Ulangi password baru" autocomplete="new-password">
+            </div>
+            <div id="changePassMsg" class="auth-error" style="margin-bottom:8px"></div>
+            <button class="btn-primary" onclick="savePassword()">Ganti Password</button>
+          </div>
+        </div>
+
+        <!-- Link cepat -->
+        <a href="game.html" class="settings-link">
+          <div class="settings-left">
+            <i class="fa-solid fa-gamepad"></i>
+            <span>CUFFLI Challenge</span>
+          </div>
+          <i class="fa-solid fa-chevron-right"></i>
+        </a>
+
+        <a href="spin.html" class="settings-link">
+          <div class="settings-left">
+            <i class="fa-solid fa-ticket"></i>
+            <span>Voucher & Spin</span>
+          </div>
+          <i class="fa-solid fa-chevron-right"></i>
+        </a>
+
+        <a href="notifikasi.html" class="settings-link">
+          <div class="settings-left">
+            <i class="fa-solid fa-bell"></i>
+            <span>Notifikasi</span>
+          </div>
+          <i class="fa-solid fa-chevron-right"></i>
+        </a>
+
+        <a href="favorite.html" class="settings-link">
+          <div class="settings-left">
+            <i class="fa-solid fa-heart" style="color:#ff2d6a"></i>
+            <span>Favorite</span>
+          </div>
+          <i class="fa-solid fa-chevron-right"></i>
+        </a>
+
+        <a href="tentang.html" class="settings-link">
+          <div class="settings-left">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>Tentang CUFFLI</span>
+          </div>
+          <i class="fa-solid fa-chevron-right"></i>
+        </a>
+
+        <a href="kontak.html" class="settings-link">
+          <div class="settings-left">
+            <i class="fa-solid fa-headset"></i>
+            <span>Hubungi Admin</span>
+          </div>
+          <i class="fa-solid fa-chevron-right"></i>
+        </a>
+
+        <!-- Logout -->
+        <button class="btn-logout" onclick="doLogout()">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- BOTTOM NAV -->
+              <nav class="bottom-nav bottom-nav-6">
+    <a href="index.html" class="nav-item">
+      <i class="fa-solid fa-house"></i>
+      <span>Beranda</span>
+    </a>
+    <a href="game.html" class="nav-item">
+      <i class="fa-solid fa-gamepad"></i>
+      <span>Game</span>
+    </a>
+    <a href="komunitas.html" class="nav-item">
+      <i class="fa-solid fa-comments"></i>
+      <span>Komunikasi</span>
+    </a>
+    <a href="tentang.html" class="nav-item">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>Tentang</span>
+    </a>
+    <a href="kontak.html" class="nav-item">
+      <i class="fa-solid fa-headset"></i>
+      <span>Kontak</span>
+    </a>
+    <a href="login.html" class="nav-item active">
+      <i class="fa-solid fa-user"></i>
+      <span>Akun</span>
+    </a>
+  </nav>
+
+  <!-- Firebase SDK (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
+  <script src="firebase.js"></script>
+  <script src="produk.js"></script>
+  <script src="script.js"></script>
+  <script src="spin.js"></script>
+  <script>
+    function showAuthError(msg) {
+      const el = document.getElementById('authError');
+      if (el) el.textContent = msg || '';
+    }
+
+    function switchAuthTab(mode) {
+      document.getElementById('tabLogin').classList.toggle('active', mode === 'login');
+      document.getElementById('tabRegister').classList.toggle('active', mode === 'register');
+      const loginForm = document.getElementById('formLoginPage');
+      const regForm = document.getElementById('formRegisterPage');
+      const phoneBox = document.getElementById('phoneLoginBox');
+      const methodTabs = document.getElementById('methodTabs');
+      const googleBtn = document.getElementById('btnGoogleLogin');
+
+      if (mode === 'login') {
+        loginForm.style.display = 'block';
+        regForm.style.display = 'none';
+        if (methodTabs) methodTabs.style.display = 'flex';
+        if (googleBtn) googleBtn.style.display = 'flex';
+        // restore method
+        const phoneActive = document.getElementById('methodPhone') && document.getElementById('methodPhone').classList.contains('active');
+        if (phoneActive) {
+          loginForm.style.display = 'none';
+          if (phoneBox) phoneBox.style.display = 'block';
+        } else {
+          if (phoneBox) phoneBox.style.display = 'none';
+        }
+      } else {
+        loginForm.style.display = 'none';
+        regForm.style.display = 'block';
+        if (phoneBox) phoneBox.style.display = 'none';
+        if (methodTabs) methodTabs.style.display = 'none';
+        if (googleBtn) googleBtn.style.display = 'none';
+      }
+      showAuthError('');
+    }
+
+    function switchMethod(method) {
+      const userTab = document.getElementById('methodUser');
+      const phoneTab = document.getElementById('methodPhone');
+      const loginForm = document.getElementById('formLoginPage');
+      const phoneBox = document.getElementById('phoneLoginBox');
+      if (method === 'phone') {
+        userTab.classList.remove('active');
+        phoneTab.classList.add('active');
+        loginForm.style.display = 'none';
+        phoneBox.style.display = 'block';
+      } else {
+        userTab.classList.add('active');
+        phoneTab.classList.remove('active');
+        loginForm.style.display = 'block';
+        phoneBox.style.display = 'none';
+      }
+      showAuthError('');
+    }
+
+    async function doGoogleLogin() {
+      const btn = document.getElementById('btnGoogleLogin');
+      showAuthError('');
+      if (!window.CuffliFirebase || !CuffliFirebase.ready) {
+        showAuthError('Firebase belum siap. Refresh halaman.');
+        return;
+      }
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menghubungkan...';
+      try {
+        const res = await CuffliFirebase.fbLoginGoogle();
+        if (res.ok) {
+          const mapped = CuffliFirebase.mapFirebaseUser(res.user);
+          setCurrentUser(mapped);
+          if (typeof addNotification === 'function') {
+            addNotification('Login Google berhasil! Selamat datang, ' + (mapped.nama || ''), 'success');
+          }
+          location.reload();
+        } else {
+          showAuthError(res.msg || 'Gagal login Google');
+        }
+      } catch (e) {
+        showAuthError(e.message || 'Gagal login Google');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Lanjutkan dengan Google';
+      }
+    }
+
+    async function doSendOtp() {
+      const phone = document.getElementById('phoneInput').value.trim();
+      const btn = document.getElementById('btnSendOtp');
+      showAuthError('');
+      if (!phone) {
+        showAuthError('Masukkan nomor HP dulu');
+        return;
+      }
+      if (!window.CuffliFirebase || !CuffliFirebase.ready) {
+        showAuthError('Firebase belum siap. Refresh halaman.');
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = 'Mengirim...';
+      try {
+        const res = await CuffliFirebase.fbSendOtp(phone, 'recaptcha-container');
+        if (res.ok) {
+          document.getElementById('phoneStep1').classList.remove('active');
+          document.getElementById('phoneStep2').classList.add('active');
+          document.getElementById('phoneSentTo').textContent = res.phone || phone;
+          document.getElementById('otpInput').focus();
+        } else {
+          showAuthError(res.msg || 'Gagal kirim OTP');
+        }
+      } catch (e) {
+        showAuthError(e.message || 'Gagal kirim OTP');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Kirim Kode OTP';
+      }
+    }
+
+    async function doVerifyOtp() {
+      const code = document.getElementById('otpInput').value.trim();
+      const btn = document.getElementById('btnVerifyOtp');
+      showAuthError('');
+      if (!code || code.length < 6) {
+        showAuthError('Masukkan 6 digit kode OTP');
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = 'Memverifikasi...';
+      try {
+        const res = await CuffliFirebase.fbVerifyOtp(code);
+        if (res.ok) {
+          const mapped = CuffliFirebase.mapFirebaseUser(res.user);
+          setCurrentUser(mapped);
+          if (typeof addNotification === 'function') {
+            addNotification('Login nomor HP berhasil!', 'success');
+          }
+          location.reload();
+        } else {
+          showAuthError(res.msg || 'Kode OTP salah');
+        }
+      } catch (e) {
+        showAuthError(e.message || 'Gagal verifikasi OTP');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Verifikasi & Masuk';
+      }
+    }
+
+    function toggleSettings(id) {
+      const body = document.getElementById('body-' + id);
+      const arrow = document.getElementById('arrow-' + id);
+      const isOpen = body.style.display === 'block';
+      // Tutup semua dulu
+      document.querySelectorAll('.settings-body').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.settings-arrow').forEach(el => el.style.transform = 'rotate(0deg)');
+      if (!isOpen) {
+        body.style.display = 'block';
+        if (arrow) arrow.style.transform = 'rotate(180deg)';
+      }
+    }
+
+    function saveProfile() {
+      const nama = document.getElementById('editNama').value;
+      const msg = document.getElementById('editProfileMsg');
+      const res = updateProfile(nama);
+      if (res.ok) {
+        msg.style.color = '#25d366';
+        msg.textContent = 'Profil berhasil disimpan!';
+        loadProfileUI();
+      } else {
+        msg.style.color = '#ff4466';
+        msg.textContent = res.msg;
+      }
+    }
+
+    function savePassword() {
+      const oldP = document.getElementById('oldPass').value;
+      const newP = document.getElementById('newPass').value;
+      const newP2 = document.getElementById('newPass2').value;
+      const msg = document.getElementById('changePassMsg');
+
+      if (newP !== newP2) {
+        msg.style.color = '#ff4466';
+        msg.textContent = 'Password baru tidak sama';
+        return;
+      }
+
+      const res = changePassword(oldP, newP);
+      if (res.ok) {
+        msg.style.color = '#25d366';
+        msg.textContent = 'Password berhasil diganti!';
+        document.getElementById('oldPass').value = '';
+        document.getElementById('newPass').value = '';
+        document.getElementById('newPass2').value = '';
+      } else {
+        msg.style.color = '#ff4466';
+        msg.textContent = res.msg;
+      }
+    }
+
+    async function doLogout() {
+      try {
+        if (window.CuffliFirebase && CuffliFirebase.ready) {
+          await CuffliFirebase.fbLogout();
+        }
+      } catch (e) {
+        console.warn('Firebase logout:', e);
+      }
+      logoutUser();
+      location.reload();
+    }
+
+    function renderProfileAvatar(src) {
+      const img = document.getElementById('profileAvatarImg');
+      const icon = document.getElementById('profileAvatarIcon');
+      const btnRemove = document.getElementById('btnRemoveAvatar');
+      if (!img || !icon) return;
+      if (src) {
+        img.src = src;
+        img.style.display = 'block';
+        icon.style.display = 'none';
+        if (btnRemove) btnRemove.style.display = 'inline-block';
+      } else {
+        img.removeAttribute('src');
+        img.style.display = 'none';
+        icon.style.display = 'block';
+        if (btnRemove) btnRemove.style.display = 'none';
+      }
+    }
+
+    function loadProfileUI() {
+      const user = getCurrentUser();
+      if (!user) return;
+
+      document.getElementById('profileNama').textContent = user.nama || user.username;
+      document.getElementById('profileUsername').textContent = '@' + (user.username || '—');
+      const idEl = document.getElementById('profileId');
+      if (idEl) {
+        // Prioritas: id lokal (CUF-XXXX) → uid Firebase → —
+        const accId = user.id || user.uid || null;
+        idEl.textContent = accId ? ('ID: ' + accId) : 'ID: —';
+      }
+      document.getElementById('editNama').value = user.nama || '';
+
+      const full = getFullUserData();
+      if (full && full.created) {
+        const d = new Date(full.created);
+        document.getElementById('profileJoined').textContent =
+          'Bergabung ' + d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+      } else {
+        document.getElementById('profileJoined').textContent = 'Bergabung —';
+      }
+
+      // Foto profil (dari session atau users store)
+      const avatar = user.avatar || (full && full.avatar) || getUserAvatar(user.username);
+      renderProfileAvatar(avatar);
+
+      // Stats spin & voucher
+      if (typeof getSpinData === 'function') {
+        const spin = getSpinData();
+        document.getElementById('statSpin').textContent = spin.spinSisa || 0;
+        const aktif = (spin.vouchers || []).filter(v => !v.used).length;
+        document.getElementById('statVoucher').textContent = aktif;
+      }
+    }
+
+    function doRemoveAvatar() {
+      const res = removeProfileAvatar();
+      if (res.ok) {
+        renderProfileAvatar(null);
+        updateHeaderAuth();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Init Firebase dulu
+      if (window.CuffliFirebase) {
+        await CuffliFirebase.initFirebase();
+
+        // Sinkronkan state Firebase Auth → localStorage
+        if (CuffliFirebase.ready) {
+          CuffliFirebase.fbOnAuthChange(function (fbUser) {
+            if (fbUser) {
+              const mapped = CuffliFirebase.mapFirebaseUser(fbUser);
+              const current = getCurrentUser();
+              // Hanya update jika belum ada session atau beda user
+              if (!current || current.uid !== mapped.uid) {
+                setCurrentUser(mapped);
+              }
+            }
+          });
+        }
+      }
+
+      const user = getCurrentUser();
+
+      if (user) {
+        document.getElementById('authSection').style.display = 'none';
+        document.getElementById('profileSection').style.display = 'block';
+        loadProfileUI();
+      } else {
+        document.getElementById('authSection').style.display = 'block';
+        document.getElementById('profileSection').style.display = 'none';
+      }
+
+      // Ganti foto profil
+      const fileInput = document.getElementById('avatarFileInput');
+      if (fileInput) {
+        fileInput.addEventListener('change', function () {
+          const file = this.files && this.files[0];
+          if (!file) return;
+          if (!file.type.startsWith('image/')) {
+            alert('Pilih file gambar saja (JPG/PNG).');
+            return;
+          }
+          compressImageFile(file, 200, function (dataUrl) {
+            if (!dataUrl) {
+              alert('Gagal memproses gambar.');
+              return;
+            }
+            const res = updateProfileAvatar(dataUrl);
+            if (res.ok) {
+              renderProfileAvatar(dataUrl);
+              updateHeaderAuth();
+            } else {
+              alert(res.msg);
+            }
+          });
+          this.value = '';
+        });
+      }
+
+      // Form login username/password (lokal)
+      document.getElementById('formLoginPage').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = document.getElementById('loginUserPage').value.trim();
+        const password = document.getElementById('loginPassPage').value;
+        const res = loginUser(username, password);
+        if (res.ok) {
+          location.reload();
+        } else {
+          showAuthError(res.msg);
+        }
+      });
+
+      // Form register
+      document.getElementById('formRegisterPage').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = document.getElementById('regUserPage').value.trim();
+        const password = document.getElementById('regPassPage').value;
+        const nama = document.getElementById('regNamaPage').value.trim();
+        const res = registerUser(username, password, nama);
+        if (res.ok) {
+          loginUser(username, password);
+          location.reload();
+        } else {
+          showAuthError(res.msg);
+        }
+      });
+
+      // Enter di OTP input = verifikasi
+      const otpInput = document.getElementById('otpInput');
+      if (otpInput) {
+        otpInput.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            doVerifyOtp();
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pembayaran — CUFFLI ALL GAME</title>
+  <title>Notifikasi — CUFFLI ALL GAME</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
-<body data-page="pembayaran">
+<body data-page="notifikasi">
 
   <!-- HEADER -->
   <header class="header">
@@ -34,51 +34,16 @@
     </div>
   </header>
 
-  <div class="pay-wrap" id="payContent">
-    <h1 class="pay-title">Scan QRIS</h1>
-    <p class="pay-produk-nama" id="payNama">—</p>
-    <div class="pay-harga" id="payHarga">—</div>
-
-    <!-- PILIH VOUCHER DARI SPIN -->
-    <div id="voucherSelectBox" class="voucher-select-box" style="display:none; margin:14px 0;">
-      <label style="display:block; font-size:13px; color:#aaa; margin-bottom:6px;">
-        <i class="fa-solid fa-ticket"></i> Pakai Voucher Spin
-      </label>
-      <select id="voucherSelect" class="voucher-select" style="width:100%; padding:10px 12px; border-radius:10px; border:1px solid #333; background:#1a1a24; color:#fff; font-size:14px;">
-        <option value="">— Tidak pakai voucher —</option>
-      </select>
+  <main class="page-content container">
+    <div class="notif-page-header">
+      <h1><i class="fa-solid fa-bell"></i> Notifikasi</h1>
+      <button class="btn-clear-notif" onclick="clearAllNotifs()">Hapus Semua</button>
     </div>
 
-    <!-- QR KHUSUS PRODUK -->
-    <div class="qris-box">
-      <img id="payQR" src="qris.jpg" alt="QRIS">
+    <div id="notifPageList" class="notif-page-list">
+      <!-- diisi JS -->
     </div>
-    <p class="qris-label" id="payQRLabel">QRIS Pembayaran</p>
-    <p class="qris-time">Sisa waktu: <span id="qrisTimer">5:00</span></p>
-
-    <!-- ADMIN INFO DI HALAMAN BAYAR -->
-    <div class="pay-admin-card" id="payAdminCard">
-      <img class="pay-admin-foto" id="payAdminFoto" src="" alt="Admin">
-      <div>
-        <div class="pay-admin-nama" id="payAdminNama">Admin</div>
-        <div class="pay-admin-sub">Transfer selesai? Konfirmasi ke admin ini</div>
-      </div>
-    </div>
-
-    <a class="btn-wa" id="btnWA" href="#" target="_blank" rel="noopener">
-      <i class="fa-brands fa-whatsapp" style="font-size:22px"></i>
-      Konfirmasi ke Admin
-    </a>
-
-    <button class="btn-primary" id="btnConfirmPay" style="margin-top:12px; max-width:320px; width:100%;">
-      <i class="fa-solid fa-check"></i> Saya Sudah Bayar
-    </button>
-
-    <p class="pay-note">
-      Setelah transfer, tekan tombol di atas untuk konfirmasi ke admin via WhatsApp.<br>
-      Akun akan dikirim setelah pembayaran terverifikasi. <strong>Fast Process</strong> aktif!
-    </p>
-  </div>
+  </main>
 
   <!-- BOTTOM NAV -->
                   <nav class="bottom-nav bottom-nav-6">
@@ -111,6 +76,47 @@
   <script src="firebase.js"></script>
   <script src="produk.js"></script>
   <script src="script.js"></script>
-  <script src="spin.js"></script>
+  <script>
+    function clearAllNotifs() {
+      localStorage.setItem('cuffli_notifs', '[]');
+      updateNotifBadge();
+      renderNotifPage();
+    }
+
+    function renderNotifPage() {
+      const listEl = document.getElementById('notifPageList');
+      if (!listEl) return;
+      const notifs = getNotifications();
+      if (notifs.length === 0) {
+        listEl.innerHTML = `
+          <div class="notif-empty-page">
+            <i class="fa-regular fa-bell-slash" style="font-size:48px; color:var(--text-muted); margin-bottom:12px"></i>
+            <p>Belum ada notifikasi</p>
+            <p style="font-size:0.85rem; color:var(--text-muted)">Notifikasi promo, order, dan chat akan muncul di sini</p>
+          </div>
+        `;
+        return;
+      }
+      listEl.innerHTML = notifs.map(n => `
+        <div class="notif-page-item ${n.read ? '' : 'unread'} type-${n.type}">
+          <div class="notif-icon">
+            ${n.type === 'promo' ? '<i class="fa-solid fa-tag"></i>' : 
+              n.type === 'success' ? '<i class="fa-solid fa-check"></i>' : 
+              '<i class="fa-solid fa-info"></i>'}
+          </div>
+          <div class="notif-content">
+            <div class="notif-text">${n.text}</div>
+            <div class="notif-time">${n.time}</div>
+          </div>
+        </div>
+      `).join('');
+      // Mark all as read when opening the page
+      markAllNotifRead();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderNotifPage();
+    });
+  </script>
 </body>
 </html>

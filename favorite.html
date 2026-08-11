@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Favorite — CUFFLI ALL GAME</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body data-page="favorite">
+
+  <header class="header">
+    <div class="logo-wrap">
+      <a href="index.html" style="display:flex;align-items:center;gap:10px">
+        <img class="logo-img" src="logo.png" alt="Logo" onerror="this.style.display='none'">
+        <span class="logo-text">CUFFLI ALL GAME</span>
+      </a>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="btnNotif" onclick="toggleNotifPanel()" title="Notifikasi">
+        <i class="fa-solid fa-bell"></i>
+        <span class="badge" id="notifBadge" style="display:none">0</span>
+      </button>
+      <button class="btn-login" id="btnLogin" onclick="location.href='login.html'">
+        <i class="fa-solid fa-user"></i> Login
+      </button>
+      <div class="user-area" id="userArea" style="display:none">
+        <span class="user-name" id="userName">User</span>
+        <button class="icon-btn" onclick="logoutUser()" title="Logout">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-content container" style="padding-bottom:90px">
+    <h1 style="font-size:1.2rem;margin-bottom:6px">
+      <i class="fa-solid fa-heart" style="color:#ff2d6a"></i> Favorite
+    </h1>
+    <p style="font-size:0.82rem;color:#888;margin-bottom:16px">
+      Produk yang kamu like otomatis masuk ke sini. Unlike = hilang dari favorite.
+    </p>
+
+    <div id="favoriteEmpty" class="favorite-empty" style="display:none">
+      <div style="font-size:2.5rem;margin-bottom:8px">💔</div>
+      <p style="font-weight:700;color:#ccc;margin-bottom:4px">Belum ada favorite</p>
+      <p style="font-size:0.85rem;color:#777;margin-bottom:14px">Like produk di beranda / detail supaya masuk ke sini.</p>
+      <a href="index.html" class="btn-primary" style="display:inline-flex;text-decoration:none;padding:10px 18px;font-size:0.88rem">
+        Lihat Produk
+      </a>
+    </div>
+
+    <div id="favoriteGrid" class="produk-grid" style="display:none"></div>
+  </main>
+
+      <nav class="bottom-nav bottom-nav-6">
+    <a href="index.html" class="nav-item">
+      <i class="fa-solid fa-house"></i>
+      <span>Beranda</span>
+    </a>
+    <a href="game.html" class="nav-item">
+      <i class="fa-solid fa-gamepad"></i>
+      <span>Game</span>
+    </a>
+    <a href="komunitas.html" class="nav-item">
+      <i class="fa-solid fa-comments"></i>
+      <span>Komunikasi</span>
+    </a>
+    <a href="tentang.html" class="nav-item">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>Tentang</span>
+    </a>
+    <a href="kontak.html" class="nav-item">
+      <i class="fa-solid fa-headset"></i>
+      <span>Kontak</span>
+    </a>
+    <a href="login.html" class="nav-item active">
+      <i class="fa-solid fa-user"></i>
+      <span>Akun</span>
+    </a>
+  </nav>
+
+  <script src="firebase.js"></script>
+  <script src="produk.js"></script>
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof renderFavoritesPage === 'function') renderFavoritesPage();
+    });
+  </script>
+</body>
+</html>
