@@ -131,7 +131,34 @@ function seedDemoLeaderboardIfEmpty() {
   saveLocalLeaderboard(demo);
 }
 
-/** Publish skor pemain ke leaderboard (local + Firebase jika ada) */
+/** Sanitize username for Firestore doc id */
+function lbDocId(username) {
+  return String(username || 'guest')
+    .toLowerCase()
+    .replace(/[^a-z0-9_\-\.]/g, '_')
+    .slice(0, 80) || 'guest';
+}
+
+/** Pastikan Firebase siap (init sekali) */
+let _lbFirebaseInitPromise = null;
+async function ensureFirebaseForLeaderboard() {
+  if (window.CuffliFirebase && window.CuffliFirebase.ready && window.CuffliFirebase.db) {
+    return true;
+  }
+  if (!window.CuffliFirebase || typeof window.CuffliFirebase.initFirebase !== 'function') {
+    return false;
+  }
+  if (!_lbFirebaseInitPromise) {
+    _lbFirebaseInitPromise = window.CuffliFirebase.initFirebase().catch((e) => {
+      console.warn('[Leaderboard] initFirebase gagal', e);
+      return false;
+    });
+  }
+  await _lbFirebaseInitPromise;
+  return !!(window.CuffliFirebase && window.CuffliFirebase.ready && window.CuffliFirebase.db);
+}
+
+/** Publish skor pemain ke leaderboard (local + Firebase global) */
 function publishToLeaderboard(gameData) {
   const user = getCurrentUser();
   if (!user || !gameData) return;
@@ -143,56 +170,77 @@ function publishToLeaderboard(gameData) {
     totalExp: gameData.totalExp || 0,
     wins: gameData.challengesWon || 0,
     discount: discountForLevel(gameData.level || 1),
-    // Avatar diambil dari akun (bisa dilihat orang lain)
     avatar: user.avatar || (typeof getUserAvatar === 'function' ? getUserAvatar(user.username) : null) || null,
+    uid: user.uid || null,
     updated: Date.now()
   };
 
-  // Local leaderboard
+  // Local leaderboard (backup di device)
   let list = getLocalLeaderboard().filter(e => e.username !== entry.username);
   list.push(entry);
   list.sort((a, b) => {
     if (b.level !== a.level) return b.level - a.level;
-    return b.totalExp - a.totalExp;
+    return (b.totalExp || 0) - (a.totalExp || 0);
   });
   saveLocalLeaderboard(list);
 
-  // Firebase global
-  if (window.CuffliFirebase && window.CuffliFirebase.ready && window.CuffliFirebase.db) {
+  // Firebase GLOBAL — semua user yang daftar terlihat di semua device
+  (async () => {
     try {
-      window.CuffliFirebase.db.collection('leaderboard').doc(entry.username).set(entry, { merge: true });
+      const ok = await ensureFirebaseForLeaderboard();
+      if (!ok || !window.CuffliFirebase.db) return;
+      const docId = lbDocId(entry.username);
+      await window.CuffliFirebase.db.collection('leaderboard').doc(docId).set(entry, { merge: true });
+      console.log('[Leaderboard] Published global:', entry.username, 'LV', entry.level);
     } catch (e) {
       console.warn('[Leaderboard] Firebase write gagal', e);
     }
-  }
+  })();
 }
 
-/** Ambil top ranking (async kalau Firebase) */
-async function fetchLeaderboard(limit = 20) {
-  seedDemoLeaderboardIfEmpty();
+/** Ambil top ranking GLOBAL dari Firestore (fallback local) */
+async function fetchLeaderboard(limit = 30) {
+  // Coba Firebase global dulu
+  try {
+    const ok = await ensureFirebaseForLeaderboard();
+    if (ok && window.CuffliFirebase.db) {
+      let rows = [];
 
-  // Coba Firebase dulu
-  if (window.CuffliFirebase && window.CuffliFirebase.ready && window.CuffliFirebase.db) {
-    try {
-      const snap = await window.CuffliFirebase.db
-        .collection('leaderboard')
-        .orderBy('level', 'desc')
-        .orderBy('totalExp', 'desc')
-        .limit(limit)
-        .get();
-      if (!snap.empty) {
-        return snap.docs.map(d => d.data());
+      // Query sederhana (1 field) supaya tidak wajib composite index
+      try {
+        const snap = await window.CuffliFirebase.db
+          .collection('leaderboard')
+          .orderBy('level', 'desc')
+          .limit(Math.max(limit * 3, 50))
+          .get();
+        rows = snap.docs.map(d => d.data());
+      } catch (e1) {
+        // Jika orderBy gagal (rules/index), ambil semua lalu sort di client
+        console.warn('[Leaderboard] orderBy gagal, fallback get()', e1);
+        const snap2 = await window.CuffliFirebase.db.collection('leaderboard').limit(100).get();
+        rows = snap2.docs.map(d => d.data());
       }
-    } catch (e) {
-      console.warn('[Leaderboard] Firebase read gagal, pakai local', e);
+
+      if (rows.length) {
+        rows.sort((a, b) => {
+          if ((b.level || 0) !== (a.level || 0)) return (b.level || 0) - (a.level || 0);
+          return (b.totalExp || 0) - (a.totalExp || 0);
+        });
+        // Cache ke local agar offline tetap ada data
+        saveLocalLeaderboard(rows.slice(0, LEADERBOARD_MAX));
+        return rows.slice(0, limit);
+      }
     }
+  } catch (e) {
+    console.warn('[Leaderboard] Firebase read gagal, pakai local', e);
   }
 
-  // Fallback local
+  // Fallback local (hanya device ini)
+  seedDemoLeaderboardIfEmpty();
   return getLocalLeaderboard()
     .sort((a, b) => {
       if (b.level !== a.level) return b.level - a.level;
-      return b.totalExp - a.totalExp;
+      return (b.totalExp || 0) - (a.totalExp || 0);
     })
     .slice(0, limit);
 }
@@ -959,17 +1007,26 @@ function claimDaily(id) {
 }
 
 // ===== INIT =====
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   if (document.body.dataset.page !== 'game') return;
+
+  // Init Firebase dulu supaya leaderboard GLOBAL
+  try {
+    if (window.CuffliFirebase && typeof window.CuffliFirebase.initFirebase === 'function') {
+      await window.CuffliFirebase.initFirebase();
+    }
+  } catch (e) {
+    console.warn('[Game] Firebase init:', e);
+  }
 
   const user = getCurrentUser();
   if (user) {
     trackDaily('login');
-    // Publish skor terkini ke leaderboard
+    // Publish skor terkini ke leaderboard GLOBAL
     publishToLeaderboard(getGameData());
   }
 
   updateGameHUD();
   updateDailyUI();
-  renderLeaderboard();
+  await renderLeaderboard();
 });
