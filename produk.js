@@ -10,7 +10,7 @@ const produkData = {
     hargaFormatted: "Rp 55.000",
     hargaAsliFormatted: "Rp 75.000",
     game: "Free Fire",
-    tags: ["ff", "akun ff", "free fire"],
+    tags: ["free fire"],
     deskripsi: "Setiap Transaksi Pastinya Ada Allreff 24 jam lewat 24 jam invalite. Proses cepat & stok terbatas!",
     spek: [
       "Rank: gold 4",
@@ -50,7 +50,7 @@ const produkData = {
     hargaFormatted: "Rp 19.000",
     hargaAsliFormatted: "Rp 25.000",
     game: "Free Fire",
-    tags: ["ff", "akun ff", "free fire", "receh"],
+    tags: ["free fire"],
     deskripsi: "Setiap Transaksi Pastinya Ada Allreff 24 jam lewat 24 jam invalite. Proses cepat & stok terbatas!",
     spek: [
       "Rank: Platinum 1",
@@ -78,6 +78,44 @@ const produkData = {
     adminWA: "6287722626689",
     qrImage: "qris.jpg",
     qrLabel: "QRIS Admin 1 — Res"
+  },
+  
+  "mobile-legends/cuffliallgame/r-001/187/mlbb": {
+    id: "mobile-legends/cuffliallgame/r-001/187/mlbb",
+    nama: "Mobile Legends",
+    subtitle: "Stok Akun Mlbb Cuffli All Game",
+    harga: 48000,
+    hargaAsli: 64000,
+    diskon: 25,
+    hargaFormatted: "Rp 48.000",
+    hargaAsliFormatted: "Rp 64.000",
+    game: "Mobile Legends",
+    tags: ["Mobile Legends"],
+    deskripsi: "Setiap Transaksi Pastinya Ada Allreff 24 jam lewat 24 jam invalite. Proses cepat & stok terbatas!",
+    spek: [
+      "Rank: legends",
+      "LOG/LOGIN: Monton",
+      "BIND: all kos",
+      "LEVEL: 30",
+      "HERO:61",
+      "corector:natalia"
+    ],
+    foto: [
+      "banner 1 3cuffli.jpg",
+      "banner 2 3cuffli.jpg",
+      "banner 3 3cuffli.jpg",
+      "banner 4 3cuffli.jpg",
+      "banner 5 3cuffli.jpg",
+      "banner 6 3cuffli.jpg"
+    ],
+    thumbnail: "banner 1 3cuffli.jpg",
+    kategori: "PELAJAR",
+    cocokUntuk: "Cocok untuk yg masih pelajar yg cari akun receh",
+    adminNama: "Admin Cuffli 1",
+    adminFoto: "admin1.png",
+    adminWA: "6287722626689",
+    qrImage: "qris.jpg",
+    qrLabel: "QRIS Admin 1 — MLBB"
   },
 };
 
