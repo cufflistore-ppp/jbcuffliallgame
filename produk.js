@@ -39,46 +39,6 @@ const produkData = {
     qrImage: "qris.jpg",
     qrLabel: "QRIS Admin 1 — Ber Sg"
   },
-
-  "free-fire/cuffliallgame/c-025/127/receh": {
-    id: "free-fire/cuffliallgame/c-025/127/receh",
-    nama: "Free Fire",
-    subtitle: "Stok Akun Res Cuffli All Game",
-    harga: 19000,
-    hargaAsli: 25000,
-    diskon: 24,
-    hargaFormatted: "Rp 19.000",
-    hargaAsliFormatted: "Rp 25.000",
-    game: "Free Fire",
-    tags: ["free fire"],
-    deskripsi: "Setiap Transaksi Pastinya Ada Allreff 24 jam lewat 24 jam invalite. Proses cepat & stok terbatas!",
-    spek: [
-      "Rank: Platinum 1",
-      "LOG/LOGIN: ggl(gogle)",
-      "HTTPS: on",
-      "EVO: sg panjang level 5",
-      "BIND: kos/kosong",
-      "SG: kayu",
-      "LEVEL: 39"
-    ],
-    foto: [
-      "banner 1 2cuffli.jpg",
-      "banner 2 2cuffli.jpg",
-      "banner 3 2cuffli.jpg",
-      "banner 4 2cuffli.jpg",
-      "banner 5 2cuffli.jpg",
-      "banner 6 2cuffli.jpg",
-      "banner 7 2cuffli.jpg"
-    ],
-    thumbnail: "banner 1 2cuffli.jpg",
-    kategori: "PELAJAR",
-    cocokUntuk: "Cocok untuk yg masih pelajar yg cari akun receh",
-    adminNama: "Admin Cuffli 1",
-    adminFoto: "admin1.png",
-    adminWA: "6287722626689",
-    qrImage: "qris.jpg",
-    qrLabel: "QRIS Admin 1 — Res"
-  },
   
   "mobile-legends/cuffliallgame/r-001/187/mlbb": {
     id: "mobile-legends/cuffliallgame/r-001/187/mlbb",
