@@ -77,6 +77,38 @@ const produkData = {
     qrImage: "qris.jpg",
     qrLabel: "QRIS Admin 1 — MLBB"
   },
+    "roblox/cuffliallgame/n-001/94/rblx": {
+    id: "roblox/cuffliallgame/n-001/94/rblx",
+    nama: "ROBLOX",
+    subtitle: "Stok Akun Rblx Cuffli All Game",
+    harga: 38000,
+    hargaAsli: 50000,
+    diskon: 24,
+    hargaFormatted: "Rp 38.000",
+    hargaAsliFormatted: "Rp 50.000",
+    game: "ROBLOX",
+    tags: ["roblox"],
+    deskripsi: "Setiap Transaksi Pastinya Ada Allreff 24 jam lewat 24 jam invalite. Proses cepat & stok terbatas!",
+    spek: [
+      "spek liat sendiri aja"
+    ],
+    foto: [
+      "banner 1 2cuffli.jpg",
+      "banner 2 2cuffli.jpg",
+      "banner 3 2cuffli.jpg",
+      "banner 4 2cuffli.jpg",
+      "banner 5 2cuffli.jpg",
+      "banner 6 2cuffli.jpg"
+    ],
+    thumbnail: "banner 1 2cuffli.jpg",
+    kategori: "PELAJAR",
+    cocokUntuk: "Cocok untuk yg masih pelajar yg cari akun receh",
+    adminNama: "Admin Cuffli 1",
+    adminFoto: "admin1.png",
+    adminWA: "6287722626689",
+    qrImage: "qris.jpg",
+    qrLabel: "QRIS Admin 1 — RBLX"
+  },
 };
 
 function getAllProduk() {
