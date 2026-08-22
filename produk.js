@@ -35,7 +35,7 @@ const produkData = {
     cocokUntuk: "Cocok untuk pelajar / main santai",
     adminNama: "Admin Cuffli 1",
     adminFoto: "admin1.png",
-    adminWA: "6287722626689",
+    adminWA: "6285607947517",
     qrImage: "qris.jpg",
     qrLabel: "QRIS Admin 1 — Ber Sg"
   },
@@ -73,7 +73,7 @@ const produkData = {
     cocokUntuk: "Cocok untuk yg masih pelajar yg cari akun receh",
     adminNama: "Admin Cuffli 1",
     adminFoto: "admin1.png",
-    adminWA: "6287722626689",
+    adminWA: "6285607947517",
     qrImage: "qris.jpg",
     qrLabel: "QRIS Admin 1 — MLBB"
   },
@@ -105,7 +105,7 @@ const produkData = {
     cocokUntuk: "Cocok untuk yg masih pelajar yg cari akun receh",
     adminNama: "Admin Cuffli 1",
     adminFoto: "admin1.png",
-    adminWA: "6287722626689",
+    adminWA: "6285607947517",
     qrImage: "qris.jpg",
     qrLabel: "QRIS Admin 1 — RBLX"
   },
